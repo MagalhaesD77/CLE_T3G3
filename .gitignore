@@ -1,3 +1,9 @@
+dataSet*/*.txt
+dataSet*/*.bin
+
+ex1
+ex2
+
 # Prerequisites
 *.d
 
