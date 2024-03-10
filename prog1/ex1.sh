@@ -7,10 +7,10 @@
 compile_output=$(gcc prog1/ex1.c -Wall -O3 -o prog1/ex1)
 
 if [ $? -eq 0 ]; then
-    echo "Compilation successful"
-    ./prog1/ex1 "$@"
+    printf "Compilation successful\n\n"
+    time ./prog1/ex1 "$@"
 else
-    echo "Compilation failed"
+    printf "Compilation failed\n\n"
 fi
 
 
