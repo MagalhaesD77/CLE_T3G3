@@ -3,134 +3,169 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define NUM_THREADS_DEFAULT 4
+#include "constants.h"
+#include "synchronization.h"
 
-pthread_t distributorThread;        // distributor thread
-pthread_t *threadWorkers;          // workers application defined thread array
-int *statusWorkers;                // return status of worker threads
-
-int *numArray;                  // array to store numbers read from file
 char *fileName;                 // name of the file to read 
-int numThreads;                 // number of threads to use
 
-int processIteraction;          // current iteraction of the bitonic process
+int statusDistributor;          // return status of distributor thread
+int *statusWorkers;             // return status of worker threads
 
 void *distributor(void *data);
 void *worker(void *data);
 void print_int_array(int *arr, int size);
+static double get_delta_time(void);
 
 
 int main(int argc, char *argv[]){
     // check if there were arguments passed
-    if (argc < 2)
+    if (argc < 3)
     {
-        printf("No file provided\n");
-        return 1;
+        printf("Provide the name of the file first and then the number of threads to use\n");
+        exit(EXIT_FAILURE);
     }
 
-    fileName = argv[1];
-
-    int opt;
-    do{
-        switch ((opt = getopt(argc, argv, "t")))
-        {
-        case 't':
-            int value = atoi(optarg);
-
-            if (value != 1 || value != 2 || value != 4|| value != 8){
-                printf("Invalid number of threads - will use the default number of threads\n");
-                numThreads = NUM_THREADS_DEFAULT;
-                break;
-            }
-            numThreads = value;
-            break;
-        case '?':
-            printf("Invalid usage\n");
-            exit(1);
-        case -1:
-            break;       
-        default:
-            break;
-        }
-    }while(opt != -1);
-
-    if(pthread_create(&distributorThread, NULL, distributor, NULL) != 0){
-        printf("Failed creating distributor thread\n");
-        exit(1);
-    }
-
-    if(pthread_join(distributorThread, NULL) != 0){
-        printf("Error on waiting thread\n");
-        exit(1);
-    }
-
-    free(numArray);
-
-}
-
-void *distributor(void *data){
-    FILE *file;
-    file = fopen (fileName, "rb");
-        
-    // checkif it was able to open the file
-    if(file == NULL ) {
-        printf("Not able to open the file.\n");
-        exit(1);
-    }
-
-    // read the first byte from the file
-    // which represents the ammount of numbers the file has
-    int array_size;
-    int err = fread(&array_size, sizeof(array_size), 1, file);
-    if(err <= 0){
-        printf("Error while reading file");
-        exit(1);
-    }
-
-    // allocate memory for the array     
-    // that will store the numbers read from the file
-    numArray = malloc(array_size * sizeof(int));
-    if(numArray == NULL){
-        printf("Error while allocating memory");
-        exit(1);
-    }
-
-    // read every number 
-    if(fread(numArray, sizeof(int), array_size, file) != array_size){
-        printf("Error while reading numbers to array");
-        exit(1);
-    }
-
-    // close file pointer
-    fclose(file);
-
-    print_int_array(numArray, array_size);
-
-    pthread_exit(EXIT_SUCCESS);
-}
-
-void *worker(void *data){
-    int id = (int*)data;
-
-    // lock until it receives work
-    if(processIteraction > 1){          // if its the first iteraction it is sort, otherwise it is merge
-
+    for (int i = 0; i < argc; i++)
+    {   
+        printf("%d - %s\n", i, argv[i]);
     }
     
 
-    statusWorkers[id] = EXIT_SUCCESS;
-    pthread_exit(&statusWorkers[id]);
+    // save the name of the file to read
+    fileName = argv[1];
+
+    // process command line arguments in order to get the number of threads
+    int nThreads;
+    if((nThreads = (int) atoi (argv[2])) <= 0){
+        fprintf(stderr, "Error getting the number of threads\n");
+        char inp[2];
+        do
+        {
+            printf("Use the default of 4 threads? (y --> Yes / n --> no)");
+            if(fgets(inp, sizeof(inp), stdin) == NULL){
+                fprintf(stderr, "Error reading input\n");
+                exit(EXIT_FAILURE);
+            }
+        } while (inp[0] != 'y' || inp[0] != 'n');
+        
+		if(inp[0] == 'n'){
+            printf("Exiting program...\n");
+            exit(EXIT_FAILURE);
+        }
+
+        nThreads = NUM_THREADS_DEFAULT;
+    }
+
+    if(nThreads != 1 && nThreads != 2 && nThreads != 4 && nThreads != 8){
+        fprintf(stderr, "Invalid number of threads\n");
+		exit(EXIT_FAILURE);
+    }
+
+    pthread_t tIdDistributor;       // distributor internal thread id array
+    pthread_t *tIdWorkers;          // workers internal thread id array
+    unsigned int *workersId;        // distributor application defined thread id array
+    int *pStatus;                   // pointer to execution status
+
+    // alocate memory for workers arrays
+    if((tIdWorkers = malloc(nThreads * sizeof(pthread_t))) == NULL 
+        || (workersId = malloc(nThreads * sizeof(unsigned int))) == NULL
+        || (statusWorkers = malloc(nThreads * sizeof(int))) == NULL)
+    {
+        fprintf(stderr, "Error allocating memory for workers arrays\n");
+		exit(EXIT_FAILURE);
+    }
+
+    // attribute an index for each worker
+    for (int i = 0; i <= nThreads; i++)
+    {
+        workersId[i] = i;
+    }
+
+    // start timer
+    (void) get_delta_time();
+
+    // initialise distributor thread
+    if(pthread_create(&tIdDistributor, NULL, distributor, NULL) != 0){
+        printf("Failed creating distributor thread\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // initialise worker threads
+    for (int i = 0; i < nThreads; i++){
+		if (pthread_create(&tIdWorkers[i], NULL, worker, &workersId[i]) != 0)
+		{
+			printf("Failed creating worker %u thread\n", i);
+			exit(EXIT_FAILURE);
+		}
+	}
+
+    // finalise worker threads
+    for (int i = 0; i < nThreads; i++){
+		if (pthread_join(tIdWorkers[i], (void *) &pStatus) != 0)
+		{
+			printf("Failed waiting for worker %u thread\n", i);
+			exit(EXIT_FAILURE);
+		}
+		printf("Worker thread %u has finished: ", i);
+		printf("its status was %d\n", *pStatus);
+	}
+
+    // finalise distributor thread
+    if(pthread_join(tIdDistributor, (void *) &pStatus) != 0){
+        printf("Failed waiting for distributor thread\n");
+        exit(EXIT_FAILURE);
+	}
+	printf("thread distributor has terminated: ");
+	printf("its status was %d\n", *pStatus);
+
+    // finish timer
+    printf ("\nElapsed time = %.6f s\n", get_delta_time ());
+
+    exit (EXIT_SUCCESS);
 }
 
-// fucntion to print a formatted array to the console
-void print_int_array(int *arr, int size){
-    printf("Printing array:\nSize: %d\n", size);
-    printf("[");
-    for (int i = 0; i < size; i++){
-        if (i != 0){
-            printf(", ");
-        }
-        printf("%d", arr[i]);
-    }
-    printf("]\n");
+/**
+ *  \brief Definition of distributor thread.
+ *
+ *  Its role is to simulate the life cycle of a distributor.
+ *
+ *  \param par pointer to application defined worker identification
+ */
+void *distributor(void *data){
+    readFile(fileName);
+
+    statusDistributor = EXIT_SUCCESS;
+	pthread_exit(&statusDistributor);
+}
+
+/**
+ *  \brief Definition of distributor thread.
+ *
+ *  Its role is to simulate the life cycle of a distributor.
+ *
+ *  \param par pointer to application defined worker identification
+ */
+void *worker(void *data){
+    unsigned int id = *((unsigned int *) data);
+
+    statusWorkers[id] = EXIT_SUCCESS;
+	pthread_exit(&statusWorkers[id]);
+}
+
+/**
+ *  \brief Get the process time that has elapsed since last call of this time.
+ *
+ *  \return process elapsed time
+ */
+static double get_delta_time(void)
+{
+  static struct timespec t0, t1;
+
+  t0 = t1;
+  if(clock_gettime (CLOCK_MONOTONIC, &t1) != 0)
+  {
+    perror ("clock_gettime");
+    exit(1);
+  }
+  return (double) (t1.tv_sec - t0.tv_sec) + 1.0e-9 * (double) (t1.tv_nsec - t0.tv_nsec);
 }

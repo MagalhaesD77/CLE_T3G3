@@ -1,16 +1,13 @@
 #!/bin/bash
 
+# Compile the C program
+gcc -Wall -O3 -o bitonicSort bitonic-sort-multithread.c synchronization.c -lpthread
 
-# gcc -Wall -O3 -o countWords countWords.c
-# -Wall: All warnings should be printed
-# -O3: Level 3 of optimization (Maximum level of optimization)
-compile_output=$(gcc ex2.c -Wall -O3 -o ex2)
-
+# Check if compilation was successful
 if [ $? -eq 0 ]; then
-    echo "Compilation successful"
-    ./ex2 "$@"
+    echo "Compilation successful. Running the program..."
+    # Run the compiled program with command line arguments
+    ./bitonicSort "$@"
 else
-    echo "Compilation failed"
+    echo "Compilation failed. Please check your code."
 fi
-
-
