@@ -7,6 +7,7 @@
 #include "synchronization.h"
 
 char *fileName;                 // name of the file to read 
+int nThreads;                   // number of worker threads
 
 int statusDistributor;          // return status of distributor thread
 int *statusWorkers;             // return status of worker threads
@@ -23,30 +24,23 @@ int main(int argc, char *argv[]){
     {
         printf("Provide the name of the file first and then the number of threads to use\n");
         exit(EXIT_FAILURE);
-    }
-
-    for (int i = 0; i < argc; i++)
-    {   
-        printf("%d - %s\n", i, argv[i]);
-    }
-    
+    }  
 
     // save the name of the file to read
     fileName = argv[1];
 
     // process command line arguments in order to get the number of threads
-    int nThreads;
     if((nThreads = (int) atoi (argv[2])) <= 0){
-        fprintf(stderr, "Error getting the number of threads\n");
+        fprintf(stderr, "Error getting the number of threads\nPass them as a cmd param or check the order of the params\n");
         char inp[2];
         do
         {
-            printf("Use the default of 4 threads? (y --> Yes / n --> no)");
+            printf("Use the default of 4 threads? (y --> Yes / n --> No)");
             if(fgets(inp, sizeof(inp), stdin) == NULL){
                 fprintf(stderr, "Error reading input\n");
                 exit(EXIT_FAILURE);
             }
-        } while (inp[0] != 'y' || inp[0] != 'n');
+        } while (inp[0] != 'y' && inp[0] != 'n');
         
 		if(inp[0] == 'n'){
             printf("Exiting program...\n");
@@ -58,7 +52,22 @@ int main(int argc, char *argv[]){
 
     if(nThreads != 1 && nThreads != 2 && nThreads != 4 && nThreads != 8){
         fprintf(stderr, "Invalid number of threads\n");
-		exit(EXIT_FAILURE);
+		char inp[2];
+        do
+        {
+            printf("Use the default of 4 threads? (y --> Yes / n --> No)");
+            if(fgets(inp, sizeof(inp), stdin) == NULL){
+                fprintf(stderr, "Error reading input\n");
+                exit(EXIT_FAILURE);
+            }
+        } while (inp[0] != 'y' && inp[0] != 'n');
+        
+		if(inp[0] == 'n'){
+            printf("Exiting program...\n");
+            exit(EXIT_FAILURE);
+        }
+
+        nThreads = NUM_THREADS_DEFAULT;
     }
 
     pthread_t tIdDistributor;       // distributor internal thread id array
@@ -99,6 +108,14 @@ int main(int argc, char *argv[]){
 		}
 	}
 
+    // finalise distributor thread
+    if(pthread_join(tIdDistributor, (void *) &pStatus) != 0){
+        printf("Failed waiting for distributor thread\n");
+        exit(EXIT_FAILURE);
+	}
+	printf("thread distributor has terminated: ");
+	printf("its status was %d\n", *pStatus);
+
     // finalise worker threads
     for (int i = 0; i < nThreads; i++){
 		if (pthread_join(tIdWorkers[i], (void *) &pStatus) != 0)
@@ -109,14 +126,6 @@ int main(int argc, char *argv[]){
 		printf("Worker thread %u has finished: ", i);
 		printf("its status was %d\n", *pStatus);
 	}
-
-    // finalise distributor thread
-    if(pthread_join(tIdDistributor, (void *) &pStatus) != 0){
-        printf("Failed waiting for distributor thread\n");
-        exit(EXIT_FAILURE);
-	}
-	printf("thread distributor has terminated: ");
-	printf("its status was %d\n", *pStatus);
 
     // finish timer
     printf ("\nElapsed time = %.6f s\n", get_delta_time ());
@@ -134,6 +143,11 @@ int main(int argc, char *argv[]){
 void *distributor(void *data){
     readFile(fileName);
 
+    defineSubSequences(nThreads);
+    
+    while (distributeWorkloads() == 0);
+    
+
     statusDistributor = EXIT_SUCCESS;
 	pthread_exit(&statusDistributor);
 }
@@ -148,8 +162,54 @@ void *distributor(void *data){
 void *worker(void *data){
     unsigned int id = *((unsigned int *) data);
 
+    int *numberArray;
+    int lenSubSequence;
+    int startIndex;
+    int endIndex;
+
+    while ((numberArray = askForWorkload(id, &lenSubSequence, &startIndex, &endIndex)) != NULL)
+    {
+        
+    }
+    
+
     statusWorkers[id] = EXIT_SUCCESS;
 	pthread_exit(&statusWorkers[id]);
+}
+
+/**
+ *  \brief implementation of the imperitive bitonic sort - descending order.
+ *
+ *  \param array array of numbers to be sorted
+ *  \param N length of the array
+ *  \param startIndex index where sub-sequence starts
+ *  \param endIndex index where sub-sequence ends
+ */
+void imperativeBitonicSort(int* array, int N, int startIndex, int endIndex){
+    // iterate through the powers of 2 up to N
+    // simulates the layers of the algorithm
+    for (int k = 2; k <= N; k = 2 * k) {
+        // iterate through half of the current value of k
+        // controls the length of the comparison between the numbers
+        for (int j = k / 2; j > 0; j = j / 2) {
+            // iterates through the partition of the array
+            for (int i = startIndex; i <= endIndex; i++) {
+                int ij = i ^ j;     // bitwise XOR, to calculate the index where to perform the comparison
+                if ((ij) > i) {     // assure correct order
+                    if (((i & k) == 0                               // bitwise AND to check if i-th index is in the lower half of the bitonic sequence
+                                && array[i] < array[ij])            // check if i-th element is smaller than ij
+                        || ((i & k) != 0                            // bitwise AND to check if i-th index is in the upper half of the bitonic sequence
+                                && array[i] > array[ij])) {         // check if i-th element is greater than ij
+
+                        // performs a common swap between the elements of the array
+                        int aux = array[i];
+                        array[i] = array[ij];
+                        array[ij] = aux;
+                    }
+                }
+            }
+        }
+    }
 }
 
 /**

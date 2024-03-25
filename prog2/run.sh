@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compile the C program
-gcc -Wall -O3 -o bitonicSort bitonic-sort-multithread.c synchronization.c -lpthread
+gcc -Wall -O3 -o bitonicSort bitonicSort.c synchronization.c -lpthread
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then

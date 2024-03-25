@@ -26,6 +26,24 @@
 */
 extern void readFile(char *fileName);
 
+/** 
+ * \brief define the number of sub-sequences to be distributed 
+ * 
+ * \param numWorkers number of worker threads
+*/
+extern void defineSubSequences(int numWorkers);
 
+/**
+ * \brief Calculate the number of sub-sequences to attribute to the workers and distribute them
+*/
+extern int distributeWorkloads();
+
+/**
+ * \brief Request sequence to sort
+ * 
+ * \return 
+*/
+
+extern int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex);
 
 #endif /* SYNCHRONIZATION_H */
