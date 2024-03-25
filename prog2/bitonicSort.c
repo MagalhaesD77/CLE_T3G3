@@ -12,10 +12,12 @@ int nThreads;                   // number of worker threads
 int statusDistributor;          // return status of distributor thread
 int *statusWorkers;             // return status of worker threads
 
+
+
 void *distributor(void *data);
 void *worker(void *data);
-void print_int_array(int *arr, int size);
 static double get_delta_time(void);
+void imperativeBitonicSort(int* array, int N, int startIndex, int endIndex);
 
 
 int main(int argc, char *argv[]){
@@ -127,6 +129,12 @@ int main(int argc, char *argv[]){
 		printf("its status was %d\n", *pStatus);
 	}
 
+    //check if array is correctly ordered
+    verifyIfSequenceIsOrdered();
+
+    // free resources
+    cleanup();
+
     // finish timer
     printf ("\nElapsed time = %.6f s\n", get_delta_time ());
 
@@ -146,7 +154,6 @@ void *distributor(void *data){
     defineSubSequences(nThreads);
     
     while (distributeWorkloads() == 0);
-    
 
     statusDistributor = EXIT_SUCCESS;
 	pthread_exit(&statusDistributor);
@@ -166,13 +173,19 @@ void *worker(void *data){
     int lenSubSequence;
     int startIndex;
     int endIndex;
+    int update = 0;
 
-    while ((numberArray = askForWorkload(id, &lenSubSequence, &startIndex, &endIndex)) != NULL)
+    while ((numberArray = askForWorkload(id, &lenSubSequence, &startIndex, &endIndex, &update)) != NULL)
     {
-        
+        if(update == 1){
+            update = 0;
+            continue;
+        }
+
+        imperativeBitonicSort(numberArray, lenSubSequence, startIndex, endIndex);
+        workFinished(id);
     }
     
-
     statusWorkers[id] = EXIT_SUCCESS;
 	pthread_exit(&statusWorkers[id]);
 }

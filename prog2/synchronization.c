@@ -1,7 +1,7 @@
 /**
- *  \file fifo.c (implementation file)
+ *  \file synchronization.c (implementation file)
  *
- *  \brief Problem name: Producers / Consumers.
+ *  \brief Problem name: Bitonic sort.
  *
  *  Synchronization based on monitors.
  *  Both threads and the monitor are implemented using the pthread library which enables the creation of a
@@ -9,11 +9,13 @@
  *
  *  Data transfer region implemented as a monitor.
  *
- *  Definition of the operations carried out by the producers / consumers:
- *     \li putVal
- *     \li getVal.
+ *  Definition of the operations carried out by the distributor / workers:
+ *     \li read file
+ *     \li defineSubSequences
+ *     \li distributeWorkloadsimplementation
+ *     \li askForWorkloads
  *
- *  \author António Rui Borges - March 2023
+ *  \author Rafael Gil & Diogo Magalhães - March 2024
  */
 
 #include <stdio.h>
@@ -27,11 +29,20 @@
 /** \brief distributor thread return status */
 extern int statusDistributor;
 
-/** \brief workers thread return status arry */
+/** \brief workers thread return status array */
 extern int *statusWorkers;
 
-/** \brief distributor thread return status */
-extern int statusDistributor;
+/** 
+ * \brief workers activity status
+ *
+ * 1 --> completed work
+ * 0 --> waiting for work
+ * -1 --> exited
+ */
+static int *activeWorkers;
+
+/** \brief initial number of workers*/
+static int initialNumberWorkers;
 
 /** \brief array to store the numbers read from the file */
 static int *numberArray;
@@ -53,6 +64,9 @@ static int finished;
 
 /** \brief number of workers waiting for workload*/
 static unsigned int lookingForWork;
+
+/** \brief number of the current iteration*/
+static int currentIteration;
 
 /** \brief locking flag which warrants mutual exclusion inside the monitor */
 static pthread_mutex_t accessCR = PTHREAD_MUTEX_INITIALIZER;
@@ -82,6 +96,7 @@ static void initialization (void)
     lenNumberArray = 0;                                                 // initialize flag
     lenSubSequences = 0;                                                // initialize flag
     requestsMade = 0;                                                   // initialize flag
+    currentIteration = 1;                                               // initialize flag
 
 	pthread_cond_init (&waitForWorkAtribution, NULL);				    // initialize distributor synchronization point
 	pthread_cond_init (&waitForWorkCompletion, NULL);			        // initialize distributor synchronization point
@@ -94,7 +109,7 @@ static void initialization (void)
  * \param arr array to be printed
  * \param size size of the array 
 */
-/* static void print_int_array(int *arr, int size){
+static void print_int_array(int *arr, int size){
     printf("Printing array:\nSize: %d\n", size);
     printf("[");
     for (int i = 0; i < size; i++){
@@ -104,7 +119,21 @@ static void initialization (void)
         printf("%d", arr[i]);
     }
     printf("]\n");
-} */
+}
+
+/**
+ * \brief checks if the number array is ordered in decreasing order
+*/
+void verifyIfSequenceIsOrdered(){
+    for (int i = 0; i < lenNumberArray - 1; i++) {
+        if (numberArray[i] < numberArray[i + 1]) {
+            printf ("Error in position %d between element %d and %d\n", i, numberArray[i], numberArray[i+1]);
+            return;
+        }
+    }
+    
+    printf ("Everything is OK!\n");
+}
 
 /**
  * \brief Read file and populate data array
@@ -126,7 +155,7 @@ void readFile(char *fileName){
     // checkif it was able to open the file
     if(file == NULL ) {
         printf("Not able to open the file.\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // read the first byte from the file
@@ -134,7 +163,7 @@ void readFile(char *fileName){
     int err = fread(&lenNumberArray, sizeof(lenNumberArray), 1, file);
     if(err <= 0){
         printf("Error while reading file");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // allocate memory for the array     
@@ -142,13 +171,13 @@ void readFile(char *fileName){
     numberArray = malloc(lenNumberArray * sizeof(int));
     if(numberArray == NULL){
         printf("Error while allocating memory");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // read every number 
     if(fread(numberArray, sizeof(int), lenNumberArray, file) != lenNumberArray){
         printf("Error while reading numbers to array");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // close file pointer
@@ -177,7 +206,15 @@ void defineSubSequences(int numWorkers){
 	pthread_once(&init, initialization);
 
     lenSubSequences = lenNumberArray / numWorkers;
-    toBeProcessed = numWorkers;
+    toBeProcessed = initialNumberWorkers = numWorkers;
+    if((activeWorkers = malloc(numWorkers * sizeof(int))) == NULL){
+        fprintf(stderr, "Error allocating memory for activeWorkers array\n");
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < numWorkers; i++)
+    {
+        activeWorkers[i] = 0;               // every worker is waiting for work at the start
+    }
 
     if ((statusDistributor = pthread_mutex_unlock (&accessCR)) != 0){                                   /* exit monitor */
         errno = statusDistributor;                                                             /* save error in errno */
@@ -185,6 +222,63 @@ void defineSubSequences(int numWorkers){
         statusDistributor = EXIT_FAILURE;
         pthread_exit (&statusDistributor);
     }
+}
+
+/**
+ * \brief check if every active worker has completed their assigned work
+ * 
+ * distributor auxiliary function 
+*/
+static int checkIfEveryWorkerHasCompletedWork(){
+    for (int i = 0; i < initialNumberWorkers; i++)
+    {
+        if(activeWorkers[i] == 0){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+/**
+ * \brief will update the activity status of the workers, selecting which workers will be working for the next iteration
+ * 
+ * distributor auxiliary function 
+*/
+void updateWorkerActivityStatus(){
+    int amountToNextIteration = 0;
+    for (int i = 0; i < initialNumberWorkers; i++){
+        if(amountToNextIteration == toBeProcessed){
+            break;
+        }
+        if(activeWorkers[i] == 1){
+            activeWorkers[i] = 0;
+            amountToNextIteration++;
+        }
+    }
+
+    // If it is the last iteration
+    if(toBeProcessed == 1){
+        for (int  i = 0; i < initialNumberWorkers; i++){
+            if(activeWorkers[i] != -1){
+                activeWorkers[i] = -1;
+            }
+        }   
+        print_int_array(activeWorkers, initialNumberWorkers);
+        return;
+    }
+    int changed = 0;
+    for (int  i = 0; i < initialNumberWorkers; i++){
+        if(activeWorkers[i] == -1){
+            continue;
+        }
+        if(changed == (toBeProcessed/2)){
+		    break;
+        }
+        activeWorkers[i] = -1;
+        changed++;
+    }
+    print_int_array(activeWorkers, initialNumberWorkers);
 }
 
 /**
@@ -217,12 +311,6 @@ int distributeWorkloads(){
 
     // decrement the number of workers looking for work
     lookingForWork--;
-    // increment the number of work requests made
-    requestsMade++;
-    // check if there have been enough requests to complete all the workloads
-    if(requestsMade == toBeProcessed){
-        finished = 1;
-    }
 
     // signal that there is a new workload ready
     if((statusDistributor = pthread_cond_signal(&waitForWorkAtribution)) != 0){
@@ -231,6 +319,51 @@ int distributeWorkloads(){
         statusDistributor = EXIT_FAILURE;
         pthread_exit (&statusDistributor);
     } 
+
+    // check if there have been enough requests to complete all the workloads of the current iteraction
+    if(requestsMade >= toBeProcessed){
+        // wait for every active worker to finish their work
+        while (checkIfEveryWorkerHasCompletedWork() == 0)
+        {
+            printf("Distributor is waiting for every worker to finish their work\n");
+            if((statusDistributor = pthread_cond_wait(&waitForWorkCompletion, &accessCR)) != 0){
+                errno = statusDistributor;                            							/* save error in errno */
+                perror("error on waiting in waitForWorkRequest");
+                statusDistributor = EXIT_FAILURE;
+                pthread_exit(&statusDistributor);
+            }
+        }
+
+        /* printf("Number Array:\n");
+        for (int i = 0; i < lenNumberArray; i++) {
+            printf("%d ", numberArray[i]);
+            if ((i + 1) % lenSubSequences == 0 && i != 31) {
+                printf("| ");
+            }
+        }
+        printf("\n"); */
+
+        printf("Distributor is going to update the workers activity status\n");
+        updateWorkerActivityStatus();
+        lookingForWork = 0;
+        requestsMade = 0;
+        toBeProcessed = toBeProcessed/2;
+        if(toBeProcessed >= 1) lenSubSequences = lenNumberArray / toBeProcessed; 
+        currentIteration++; 
+
+        // unblock workers
+        if((statusDistributor = pthread_cond_signal(&waitForWorkAtribution)) != 0){
+            errno = statusDistributor;                                                                  /* save error in errno */
+            perror("error on signaling in waitForWorkAttribution");
+            statusDistributor = EXIT_FAILURE;
+            pthread_exit (&statusDistributor);
+        }
+    }
+
+    // true if all sub-sequences have been processed
+    if(toBeProcessed < 1){
+        finished = 1;
+    }
 
     if ((statusDistributor = pthread_mutex_unlock (&accessCR)) != 0){                                   /* exit monitor */
         errno = statusDistributor;                                                             /* save error in errno */
@@ -245,10 +378,16 @@ int distributeWorkloads(){
 /**
  * \brief Request sequence to sort
  * 
- * \return the array of numbers to be process or -1 to signal the end of the program
+ * \param workerId id of the worker
+ * \param length length of the sub-sequence to be processed
+ * \param startIndex index from which the sub-sequence starts
+ * \param endIndex index at which the sub-sequence ends
+ * \param update flag to simbolize the start of a new iteration
+ * 
+ * \return the array of numbers to be process or NULL to signal the end of the program
 */
 
-int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex){
+int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, int *update){
     if ((statusWorkers[workerId] = pthread_mutex_lock(&accessCR)) != 0){								/* enter monitor */
 		errno = statusWorkers[workerId];															/* save error in errno */
 		perror("error on entering monitor(CF)");
@@ -256,6 +395,39 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex){
 		pthread_exit(&statusWorkers[workerId]);
 	}
 	pthread_once(&init, initialization);                                                    /* internal data initialization */
+
+    // block worker here while its activity status is equal to 1
+    while(activeWorkers[workerId] == 1){
+        printf("Worker %d is waiting for next iteration\n", workerId);
+        if((statusWorkers[workerId] = pthread_cond_wait(&waitForWorkAtribution, &accessCR)) != 0){
+            errno = statusWorkers[workerId];                                                                /* save error in errno */
+            perror("error on waiting for waitForWorkAttribution");
+            statusWorkers[workerId] = EXIT_FAILURE;
+            pthread_exit(&statusWorkers[workerId]);
+        }
+    }
+
+    // check to see whether or not it was chosen to work
+    // ending the thread if it was not chosen
+    if(activeWorkers[workerId] == -1){
+        if ((statusWorkers[workerId] = pthread_cond_signal(&waitForWorkAtribution)) != 0){
+            errno = statusWorkers[workerId];                         									/* save error in errno */
+            perror ("error on signaling waitForWorkRequest");
+            statusWorkers[workerId] = EXIT_FAILURE;
+            pthread_exit(&statusWorkers[workerId]);
+        }
+        if ((statusWorkers[workerId] = pthread_mutex_unlock(&accessCR)) != 0){								
+            errno = statusWorkers[workerId];															/* save error in errno */
+            perror("error on entering monitor(CF)");
+            statusWorkers[workerId] = EXIT_FAILURE;
+            pthread_exit(&statusWorkers[workerId]);
+        }
+
+        printf("Worker %d has accomplish its functions. Will be terminated...\n", workerId);
+        return NULL;
+    }
+
+    int iteration = currentIteration;
 
     // add to the waiting line
     lookingForWork++;
@@ -270,6 +442,12 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex){
 		pthread_exit(&statusWorkers[workerId]);
 	}
 
+    // increment the number of work requests made
+    requestsMade++;
+
+    // save the current request number, preventing incorrect 
+    int myCurrentRequestNumber = requestsMade;
+
     // wait for a workload attribution
     if((statusWorkers[workerId] = pthread_cond_wait(&waitForWorkAtribution, &accessCR)) != 0){
         errno = statusWorkers[workerId];                                                                /* save error in errno */
@@ -278,14 +456,29 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex){
         pthread_exit(&statusWorkers[workerId]);
     }
 
-    printf("Worker %d was attributed work\n", workerId);
+    // check if the iteration has change while it was waiting
+    // simbolizing that it was picked but has to start this action againg
+    // in order to update its data
+    if(iteration != currentIteration){
+        if ((statusWorkers[workerId] = pthread_mutex_unlock(&accessCR)) != 0){								/* exit monitor */
+            errno = statusWorkers[workerId];															/* save error in errno */
+            perror("error on entering monitor(CF)");
+            statusWorkers[workerId] = EXIT_FAILURE;
+            pthread_exit(&statusWorkers[workerId]);
+        }
+
+        *update = 1;
+        return numberArray;
+    }
 
     //define length of the sub-sequence to sort
     *length = lenSubSequences;
     //define the index to the start of the sub-sequence
-    *startIndex = (requestsMade - 1) * lenSubSequences;
+    *startIndex = (myCurrentRequestNumber - 1) * lenSubSequences;
     //define the index to the end of the sub-sequence
-    *startIndex = (requestsMade* lenSubSequences) - 1;
+    *endIndex = (myCurrentRequestNumber * lenSubSequences) - 1;
+
+    printf("Worker %d was attributed work. Len: %d. Start: %d. End: %d\n", workerId, *length, *startIndex, *endIndex);
 
 
     if ((statusWorkers[workerId] = pthread_mutex_unlock(&accessCR)) != 0){								/* exit monitor */
@@ -300,4 +493,49 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex){
     }
 
     return numberArray;
+}
+
+/**
+ * \brief Notify that the work is done
+ * 
+ * \param workerId id of the worker
+*/
+void workFinished(int workerId){
+    if ((statusWorkers[workerId] = pthread_mutex_lock(&accessCR)) != 0){								/* enter monitor */
+		errno = statusWorkers[workerId];															/* save error in errno */
+		perror("error on entering monitor(CF)");
+		statusWorkers[workerId] = EXIT_FAILURE;
+		pthread_exit(&statusWorkers[workerId]);
+	}
+	pthread_once(&init, initialization);                                                    /* internal data initialization */
+
+    // update status has completed work
+    activeWorkers[workerId] = 1;
+
+    // signal distributor that work is finished
+    if((statusWorkers[workerId] = pthread_cond_signal(&waitForWorkCompletion)) != 0){
+        errno = statusWorkers[workerId];                         									/* save error in errno */
+		perror ("error on signaling waitForWorkCompletion");
+		statusWorkers[workerId] = EXIT_FAILURE;
+		pthread_exit(&statusWorkers[workerId]);
+    }
+
+    if ((statusWorkers[workerId] = pthread_mutex_unlock(&accessCR)) != 0){								/* exit monitor */
+		errno = statusWorkers[workerId];															/* save error in errno */
+		perror("error on entering monitor(CF)");
+		statusWorkers[workerId] = EXIT_FAILURE;
+		pthread_exit(&statusWorkers[workerId]);
+	}
+}
+
+/**
+ * \brief clean-up function. release memory and destroy mutex and conditional variables
+*/
+void cleanup(){
+    free(numberArray);
+    free(activeWorkers);
+    pthread_mutex_destroy(&accessCR);
+    pthread_cond_destroy(&waitForWorkAtribution);
+    pthread_cond_destroy(&waitForWorkCompletion);
+    pthread_cond_destroy(&waitForWorkRequest);
 }
