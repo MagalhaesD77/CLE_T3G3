@@ -186,6 +186,8 @@ void *worker(void *data){
         workFinished(id);
     }
     
+    printf("Worker %d has accomplished its functions. Will be terminated...\n", id);
+
     statusWorkers[id] = EXIT_SUCCESS;
 	pthread_exit(&statusWorkers[id]);
 }

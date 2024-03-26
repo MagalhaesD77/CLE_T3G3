@@ -59,14 +59,14 @@ static int toBeProcessed;
 /** \brief number of work requests made*/
 static int requestsMade;
 
+/** \brief number of workloads taken by workers */
+static int workRequestsAttributed; 
+
 /** \brief flag to signal the end of the program*/
 static int finished;
 
 /** \brief number of workers waiting for workload*/
 static unsigned int lookingForWork;
-
-/** \brief number of the current iteration*/
-static int currentIteration;
 
 /** \brief locking flag which warrants mutual exclusion inside the monitor */
 static pthread_mutex_t accessCR = PTHREAD_MUTEX_INITIALIZER;
@@ -96,7 +96,7 @@ static void initialization (void)
     lenNumberArray = 0;                                                 // initialize flag
     lenSubSequences = 0;                                                // initialize flag
     requestsMade = 0;                                                   // initialize flag
-    currentIteration = 1;                                               // initialize flag
+    workRequestsAttributed = 0;                                         // initialize flag
 
 	pthread_cond_init (&waitForWorkAtribution, NULL);				    // initialize distributor synchronization point
 	pthread_cond_init (&waitForWorkCompletion, NULL);			        // initialize distributor synchronization point
@@ -110,7 +110,6 @@ static void initialization (void)
  * \param size size of the array 
 */
 static void print_int_array(int *arr, int size){
-    printf("Printing array:\nSize: %d\n", size);
     printf("[");
     for (int i = 0; i < size; i++){
         if (i != 0){
@@ -307,8 +306,6 @@ int distributeWorkloads(){
         }
     }
 
-    printf("Distributor is going to distribute work\n");
-
     // decrement the number of workers looking for work
     lookingForWork--;
 
@@ -321,7 +318,8 @@ int distributeWorkloads(){
     } 
 
     // check if there have been enough requests to complete all the workloads of the current iteraction
-    if(requestsMade >= toBeProcessed){
+    // and if they have been taken by workers
+    if(requestsMade >= toBeProcessed && workRequestsAttributed >= toBeProcessed){
         // wait for every active worker to finish their work
         while (checkIfEveryWorkerHasCompletedWork() == 0)
         {
@@ -334,22 +332,13 @@ int distributeWorkloads(){
             }
         }
 
-        /* printf("Number Array:\n");
-        for (int i = 0; i < lenNumberArray; i++) {
-            printf("%d ", numberArray[i]);
-            if ((i + 1) % lenSubSequences == 0 && i != 31) {
-                printf("| ");
-            }
-        }
-        printf("\n"); */
-
-        printf("Distributor is going to update the workers activity status\n");
+        printf("Workers activity status:\n");
         updateWorkerActivityStatus();
         lookingForWork = 0;
         requestsMade = 0;
+        workRequestsAttributed = 0;
         toBeProcessed = toBeProcessed/2;
         if(toBeProcessed >= 1) lenSubSequences = lenNumberArray / toBeProcessed; 
-        currentIteration++; 
 
         // unblock workers
         if((statusDistributor = pthread_cond_signal(&waitForWorkAtribution)) != 0){
@@ -423,11 +412,8 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, i
             pthread_exit(&statusWorkers[workerId]);
         }
 
-        printf("Worker %d has accomplish its functions. Will be terminated...\n", workerId);
         return NULL;
     }
-
-    int iteration = currentIteration;
 
     // add to the waiting line
     lookingForWork++;
@@ -442,11 +428,9 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, i
 		pthread_exit(&statusWorkers[workerId]);
 	}
 
-    // increment the number of work requests made
-    requestsMade++;
-
     // save the current request number, preventing incorrect 
-    int myCurrentRequestNumber = requestsMade;
+    // and increment the number of work requests made
+    int myCurrentRequestNumber = ++requestsMade;
 
     // wait for a workload attribution
     if((statusWorkers[workerId] = pthread_cond_wait(&waitForWorkAtribution, &accessCR)) != 0){
@@ -456,20 +440,13 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, i
         pthread_exit(&statusWorkers[workerId]);
     }
 
-    // check if the iteration has change while it was waiting
-    // simbolizing that it was picked but has to start this action againg
-    // in order to update its data
-    if(iteration != currentIteration){
-        if ((statusWorkers[workerId] = pthread_mutex_unlock(&accessCR)) != 0){								/* exit monitor */
-            errno = statusWorkers[workerId];															/* save error in errno */
-            perror("error on entering monitor(CF)");
-            statusWorkers[workerId] = EXIT_FAILURE;
-            pthread_exit(&statusWorkers[workerId]);
-        }
-
-        *update = 1;
-        return numberArray;
-    }
+    workRequestsAttributed++;
+    if ((statusWorkers[workerId] = pthread_cond_signal(&waitForWorkRequest)) != 0){
+		errno = statusWorkers[workerId];                         									/* save error in errno */
+		perror ("error on signaling waitForWorkRequest");
+		statusWorkers[workerId] = EXIT_FAILURE;
+		pthread_exit(&statusWorkers[workerId]);
+	}
 
     //define length of the sub-sequence to sort
     *length = lenSubSequences;
