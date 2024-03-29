@@ -1,3 +1,17 @@
+/**
+ *  \file bitonicSort.c (implementation file)
+ *
+ *  \brief Problem name: Bitonic sort.
+ *  
+ *  Synchronization based on monitors.
+ *  Both threads and the monitor are implemented using the pthread library which enables the creation of a
+ *  monitor of the Lampson / Redell type.
+ *
+ *  Generate threads of the intervening entities.
+ *
+ *  \author Rafael Gil & Diogo Magalhães - March 2024
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,8 +32,26 @@ void *distributor(void *data);
 void *worker(void *data);
 static double get_delta_time(void);
 void imperativeBitonicSort(int* array, int N, int startIndex, int endIndex);
+void merge(int *array, int N, int startIndex, int endIndex);
 
-
+/**
+ *  \brief Main thread.
+ *
+ *  1 --> Checks if it has received the adequate number of arguments
+ *  2 --> Check the validity of the arguments it has received
+ *  3 --> Allocate memory for the necessary data structures
+ *  4 --> Initialize Distributor thread
+ *  5 --> Initialize Worker threads
+ *  6 --> Wait for Distributor thread to finish
+ *  7 --> Wait for Worker threads to finish
+ *  8 --> Check if the sequence is correctly sorted
+ *  9 --> Print elapsed time
+ * 
+ *  \param argc number of words of the command line
+ *  \param argv list of words of the command line
+ *
+ *  \return status of operation
+ */
 int main(int argc, char *argv[]){
     // check if there were arguments passed
     if (argc < 3)
@@ -173,20 +205,20 @@ void *worker(void *data){
     int lenSubSequence;
     int startIndex;
     int endIndex;
-    int update = 0;
+    int iteration;
 
-    while ((numberArray = askForWorkload(id, &lenSubSequence, &startIndex, &endIndex, &update)) != NULL)
+    while ((numberArray = askForWorkload(id, &lenSubSequence, &startIndex, &endIndex, &iteration)) != NULL)
     {
-        if(update == 1){
-            update = 0;
-            continue;
+        if(iteration <= 0){
+            imperativeBitonicSort(numberArray, lenSubSequence, startIndex, endIndex);
+        }else{
+            merge(numberArray, lenSubSequence, startIndex, endIndex);
         }
 
-        imperativeBitonicSort(numberArray, lenSubSequence, startIndex, endIndex);
         workFinished(id);
     }
     
-    printf("Worker %d has accomplished its functions. Will be terminated...\n", id);
+    //printf("Worker %d has accomplished its functions. Will be terminated...\n", id);
 
     statusWorkers[id] = EXIT_SUCCESS;
 	pthread_exit(&statusWorkers[id]);
@@ -225,6 +257,36 @@ void imperativeBitonicSort(int* array, int N, int startIndex, int endIndex){
             }
         }
     }
+}
+
+/**
+ * \brief implements bitonic merge
+ * 
+ * \param array array of numbers to be sorted
+ * \param N length of the array
+ * \param startIndex index where sub-sequence starts
+ * \param endIndex index where sub-sequence ends
+*/
+void merge(int *array, int N, int startIndex, int endIndex){
+    int k = N;
+    for (int j = k / 2; j > 0; j = j / 2) {
+            // iterates through the partition of the array
+            for (int i = startIndex; i <= endIndex; i++) {
+                int ij = i ^ j;     // bitwise XOR, to calculate the index where to perform the comparison
+                if ((ij) > i) {     // assure correct order
+                    if (((i & k) == 0                               // bitwise AND to check if i-th index is in the lower half of the bitonic sequence
+                                && array[i] < array[ij])            // check if i-th element is smaller than ij
+                        || ((i & k) != 0                            // bitwise AND to check if i-th index is in the upper half of the bitonic sequence
+                                && array[i] > array[ij])) {         // check if i-th element is greater than ij
+
+                        // performs a common swap between the elements of the array
+                        int aux = array[i];
+                        array[i] = array[ij];
+                        array[ij] = aux;
+                    }
+                }
+            }
+        }
 }
 
 /**

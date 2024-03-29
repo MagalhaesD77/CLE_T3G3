@@ -49,11 +49,12 @@ extern int distributeWorkloads();
  * \param length length of the sub-sequence to be processed
  * \param startIndex index from which the sub-sequence starts
  * \param endIndex index at which the sub-sequence ends
- * \param update flag to simbolize the start of a new iteration
+ * \param iteration current iteration of the algorithm
  * 
  * \return the array of numbers to be process or NULL to signal the end of the program
 */
-extern int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, int *update);
+extern int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, int *iteration);
+
 
 /**
  * \brief Notify that the work is done
@@ -65,11 +66,11 @@ extern void workFinished(int workerId);
 /**
  * \brief checks if the number array is ordered in decreasing order
 */
-void verifyIfSequenceIsOrdered();
+extern void verifyIfSequenceIsOrdered();
 
 /**
  * \brief clean-up function. release memory and destroy mutex and conditional variables
 */
-void cleanup();
+extern void cleanup();
 
 #endif /* SYNCHRONIZATION_H */

@@ -62,6 +62,9 @@ static int requestsMade;
 /** \brief number of workloads taken by workers */
 static int workRequestsAttributed; 
 
+/** \brief number of the current iteration */
+static int currentIteration; 
+
 /** \brief flag to signal the end of the program*/
 static int finished;
 
@@ -97,6 +100,7 @@ static void initialization (void)
     lenSubSequences = 0;                                                // initialize flag
     requestsMade = 0;                                                   // initialize flag
     workRequestsAttributed = 0;                                         // initialize flag
+    currentIteration = 0;                                               // initialize flag
 
 	pthread_cond_init (&waitForWorkAtribution, NULL);				    // initialize distributor synchronization point
 	pthread_cond_init (&waitForWorkCompletion, NULL);			        // initialize distributor synchronization point
@@ -338,6 +342,7 @@ int distributeWorkloads(){
         requestsMade = 0;
         workRequestsAttributed = 0;
         toBeProcessed = toBeProcessed/2;
+        currentIteration++;
         if(toBeProcessed >= 1) lenSubSequences = lenNumberArray / toBeProcessed; 
 
         // unblock workers
@@ -371,12 +376,11 @@ int distributeWorkloads(){
  * \param length length of the sub-sequence to be processed
  * \param startIndex index from which the sub-sequence starts
  * \param endIndex index at which the sub-sequence ends
- * \param update flag to simbolize the start of a new iteration
+ * \param iteration current iteration of the algorithm
  * 
  * \return the array of numbers to be process or NULL to signal the end of the program
 */
-
-int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, int *update){
+int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, int *iteration){
     if ((statusWorkers[workerId] = pthread_mutex_lock(&accessCR)) != 0){								/* enter monitor */
 		errno = statusWorkers[workerId];															/* save error in errno */
 		perror("error on entering monitor(CF)");
@@ -454,6 +458,8 @@ int* askForWorkload(int workerId, int *length, int *startIndex, int *endIndex, i
     *startIndex = (myCurrentRequestNumber - 1) * lenSubSequences;
     //define the index to the end of the sub-sequence
     *endIndex = (myCurrentRequestNumber * lenSubSequences) - 1;
+    //save the iteration 
+    *iteration = currentIteration;
 
     printf("Worker %d was attributed work. Len: %d. Start: %d. End: %d\n", workerId, *length, *startIndex, *endIndex);
 
