@@ -1,0 +1,169 @@
+\hypertarget{synchronization_8c}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE-\/\+Projeto1/prog2/synchronization.c File Reference}
+\label{synchronization_8c}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog2/synchronization.c@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog2/synchronization.c}}
+
+
+Problem name\+: Bitonic sort.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}constants.\+h\char`\"{}}\newline
+Include dependency graph for synchronization.\+c\+:
+% FIG 0
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{synchronization_8c_a0eaab2210856ae04a507b995812f0e0a}\label{synchronization_8c_a0eaab2210856ae04a507b995812f0e0a}} 
+void {\bfseries verify\+If\+Sequence\+Is\+Ordered} ()
+\begin{DoxyCompactList}\small\item\em checks if the number array is ordered in decreasing order \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{synchronization_8c_a4b89e25abb04707d5d23ddd27f70647f}{read\+File}} (char $\ast$file\+Name)
+\begin{DoxyCompactList}\small\item\em Read file and populate data array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{synchronization_8c_aaa4a080aa3c840d247f041e5640e0f2f}{define\+Sub\+Sequences}} (int num\+Workers)
+\begin{DoxyCompactList}\small\item\em define the number of sub-\/sequences to be distributed \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{synchronization_8c_a70b8678efa179ecc2849918e7e4c9d07}{update\+Worker\+Activity\+Status}} ()
+\begin{DoxyCompactList}\small\item\em will update the activity status of the workers, selecting which workers will be working for the next iteration \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{synchronization_8c_a5936cfefe65d290b9c19d4aee95051dd}{distribute\+Workloads}} ()
+\begin{DoxyCompactList}\small\item\em Calculate the number of sub-\/sequences to attribute to the workers and distribute them. \end{DoxyCompactList}\item 
+int $\ast$ \mbox{\hyperlink{synchronization_8c_abe2cf885b3d4ecc6c1e4e31c2f16eada}{ask\+For\+Workload}} (int worker\+Id, int $\ast$length, int $\ast$start\+Index, int $\ast$end\+Index, int $\ast$iteration)
+\begin{DoxyCompactList}\small\item\em Request sequence to sort. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{synchronization_8c_abf5a2ff8498159f50574ddba91d031b5}{work\+Finished}} (int worker\+Id)
+\begin{DoxyCompactList}\small\item\em Notify that the work is done. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{synchronization_8c_a4b66d5e31b5dc18b314c8a68163263bd}\label{synchronization_8c_a4b66d5e31b5dc18b314c8a68163263bd}} 
+void {\bfseries cleanup} ()
+\begin{DoxyCompactList}\small\item\em clean-\/up function. release memory and destroy mutex and conditional variables \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{synchronization_8c_a0432739715a9d8adade7b705a74c7b86}\label{synchronization_8c_a0432739715a9d8adade7b705a74c7b86}} 
+int {\bfseries status\+Distributor}
+\begin{DoxyCompactList}\small\item\em distributor thread return status \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{synchronization_8c_a1cb6018e07acf1baf8890aa9fe20572b}\label{synchronization_8c_a1cb6018e07acf1baf8890aa9fe20572b}} 
+int $\ast$ {\bfseries status\+Workers}
+\begin{DoxyCompactList}\small\item\em workers thread return status array \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Bitonic sort. 
+
+(interface file)
+
+Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
+
+Data transfer region implemented as a monitor.
+
+Definition of the operations carried out by the distributor / workers\+: \begin{DoxyItemize}
+\item read file \item define\+Sub\+Sequences \item distribute\+Workloads \item ask\+For\+Workloads\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Rafael Gil \& Diogo Magalhães -\/ March 2024
+\end{DoxyAuthor}
+(implementation file)
+
+Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
+
+Data transfer region implemented as a monitor.
+
+Definition of the operations carried out by the distributor / workers\+: \begin{DoxyItemize}
+\item read file \item define\+Sub\+Sequences \item distribute\+Workloadsimplementation \item ask\+For\+Workloads\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Rafael Gil \& Diogo Magalhães -\/ March 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{synchronization_8c_abe2cf885b3d4ecc6c1e4e31c2f16eada}\label{synchronization_8c_abe2cf885b3d4ecc6c1e4e31c2f16eada}} 
+\index{synchronization.c@{synchronization.c}!askForWorkload@{askForWorkload}}
+\index{askForWorkload@{askForWorkload}!synchronization.c@{synchronization.c}}
+\doxysubsubsection{\texorpdfstring{askForWorkload()}{askForWorkload()}}
+{\footnotesize\ttfamily int $\ast$ ask\+For\+Workload (\begin{DoxyParamCaption}\item[{int}]{worker\+Id,  }\item[{int $\ast$}]{length,  }\item[{int $\ast$}]{start\+Index,  }\item[{int $\ast$}]{end\+Index,  }\item[{int $\ast$}]{iteration }\end{DoxyParamCaption})}
+
+
+
+Request sequence to sort. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worker\+Id} & id of the worker \\
+\hline
+{\em length} & length of the sub-\/sequence to be processed \\
+\hline
+{\em start\+Index} & index from which the sub-\/sequence starts \\
+\hline
+{\em end\+Index} & index at which the sub-\/sequence ends \\
+\hline
+{\em iteration} & current iteration of the algorithm\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the array of numbers to be process or NULL to signal the end of the program 
+\end{DoxyReturn}
+\mbox{\Hypertarget{synchronization_8c_aaa4a080aa3c840d247f041e5640e0f2f}\label{synchronization_8c_aaa4a080aa3c840d247f041e5640e0f2f}} 
+\index{synchronization.c@{synchronization.c}!defineSubSequences@{defineSubSequences}}
+\index{defineSubSequences@{defineSubSequences}!synchronization.c@{synchronization.c}}
+\doxysubsubsection{\texorpdfstring{defineSubSequences()}{defineSubSequences()}}
+{\footnotesize\ttfamily void define\+Sub\+Sequences (\begin{DoxyParamCaption}\item[{int}]{num\+Workers }\end{DoxyParamCaption})}
+
+
+
+define the number of sub-\/sequences to be distributed 
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+Workers} & number of worker threads \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{synchronization_8c_a5936cfefe65d290b9c19d4aee95051dd}\label{synchronization_8c_a5936cfefe65d290b9c19d4aee95051dd}} 
+\index{synchronization.c@{synchronization.c}!distributeWorkloads@{distributeWorkloads}}
+\index{distributeWorkloads@{distributeWorkloads}!synchronization.c@{synchronization.c}}
+\doxysubsubsection{\texorpdfstring{distributeWorkloads()}{distributeWorkloads()}}
+{\footnotesize\ttfamily int distribute\+Workloads (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Calculate the number of sub-\/sequences to attribute to the workers and distribute them. 
+
+\begin{DoxyReturn}{Returns}
+flag that signals the end of the program 
+\end{DoxyReturn}
+\mbox{\Hypertarget{synchronization_8c_a4b89e25abb04707d5d23ddd27f70647f}\label{synchronization_8c_a4b89e25abb04707d5d23ddd27f70647f}} 
+\index{synchronization.c@{synchronization.c}!readFile@{readFile}}
+\index{readFile@{readFile}!synchronization.c@{synchronization.c}}
+\doxysubsubsection{\texorpdfstring{readFile()}{readFile()}}
+{\footnotesize\ttfamily void read\+File (\begin{DoxyParamCaption}\item[{char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Read file and populate data array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Name} & name of the file to read \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{synchronization_8c_a70b8678efa179ecc2849918e7e4c9d07}\label{synchronization_8c_a70b8678efa179ecc2849918e7e4c9d07}} 
+\index{synchronization.c@{synchronization.c}!updateWorkerActivityStatus@{updateWorkerActivityStatus}}
+\index{updateWorkerActivityStatus@{updateWorkerActivityStatus}!synchronization.c@{synchronization.c}}
+\doxysubsubsection{\texorpdfstring{updateWorkerActivityStatus()}{updateWorkerActivityStatus()}}
+{\footnotesize\ttfamily void update\+Worker\+Activity\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+will update the activity status of the workers, selecting which workers will be working for the next iteration 
+
+distributor auxiliary function \mbox{\Hypertarget{synchronization_8c_abf5a2ff8498159f50574ddba91d031b5}\label{synchronization_8c_abf5a2ff8498159f50574ddba91d031b5}} 
+\index{synchronization.c@{synchronization.c}!workFinished@{workFinished}}
+\index{workFinished@{workFinished}!synchronization.c@{synchronization.c}}
+\doxysubsubsection{\texorpdfstring{workFinished()}{workFinished()}}
+{\footnotesize\ttfamily void work\+Finished (\begin{DoxyParamCaption}\item[{int}]{worker\+Id }\end{DoxyParamCaption})}
+
+
+
+Notify that the work is done. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worker\+Id} & id of the worker \\
+\hline
+\end{DoxyParams}

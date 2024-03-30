@@ -1,0 +1,158 @@
+\hypertarget{bitonicSort_8c}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE-\/\+Projeto1/prog2/bitonic\+Sort.c File Reference}
+\label{bitonicSort_8c}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog2/bitonicSort.c@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog2/bitonicSort.c}}
+
+
+Problem name\+: Bitonic sort.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}constants.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}synchronization.\+h\char`\"{}}\newline
+Include dependency graph for bitonic\+Sort.\+c\+:
+% FIG 0
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{bitonicSort_8c_aa65bbd1c43f9357fc116cdb29688987e}{distributor}} (void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Definition of distributor thread. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{bitonicSort_8c_aed9d8febd3d892a914b0989f01bde7f4}{worker}} (void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Definition of distributor thread. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bitonicSort_8c_a2b7a63a85ea0d65fe0e325fbb325c0ba}{imperative\+Bitonic\+Sort}} (int $\ast$array, int N, int start\+Index, int end\+Index)
+\begin{DoxyCompactList}\small\item\em implementation of the imperitive bitonic sort -\/ descending order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bitonicSort_8c_ac69842f6331dc8fc281cb654cb0f7533}{merge}} (int $\ast$array, int N, int start\+Index, int end\+Index)
+\begin{DoxyCompactList}\small\item\em implements bitonic merge \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{bitonicSort_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bitonicSort_8c_a25c8761bc1f523fe6a53db546ae83add}\label{bitonicSort_8c_a25c8761bc1f523fe6a53db546ae83add}} 
+char $\ast$ {\bfseries file\+Name}
+\item 
+\mbox{\Hypertarget{bitonicSort_8c_a8adda9db6d1fb7be6f86999c24c75ab0}\label{bitonicSort_8c_a8adda9db6d1fb7be6f86999c24c75ab0}} 
+int {\bfseries n\+Threads}
+\item 
+\mbox{\Hypertarget{bitonicSort_8c_a0432739715a9d8adade7b705a74c7b86}\label{bitonicSort_8c_a0432739715a9d8adade7b705a74c7b86}} 
+int {\bfseries status\+Distributor}
+\begin{DoxyCompactList}\small\item\em distributor thread return status \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bitonicSort_8c_a1cb6018e07acf1baf8890aa9fe20572b}\label{bitonicSort_8c_a1cb6018e07acf1baf8890aa9fe20572b}} 
+int $\ast$ {\bfseries status\+Workers}
+\begin{DoxyCompactList}\small\item\em workers thread return status array \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Bitonic sort. 
+
+(implementation file)
+
+Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
+
+Generate threads of the intervening entities.
+
+\begin{DoxyAuthor}{Author}
+Rafael Gil \& Diogo Magalhães -\/ March 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bitonicSort_8c_aa65bbd1c43f9357fc116cdb29688987e}\label{bitonicSort_8c_aa65bbd1c43f9357fc116cdb29688987e}} 
+\index{bitonicSort.c@{bitonicSort.c}!distributor@{distributor}}
+\index{distributor@{distributor}!bitonicSort.c@{bitonicSort.c}}
+\doxysubsubsection{\texorpdfstring{distributor()}{distributor()}}
+{\footnotesize\ttfamily void $\ast$ distributor (\begin{DoxyParamCaption}\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Definition of distributor thread. 
+
+Its role is to simulate the life cycle of a distributor.
+
+
+\begin{DoxyParams}{Parameters}
+{\em par} & pointer to application defined worker identification \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{bitonicSort_8c_a2b7a63a85ea0d65fe0e325fbb325c0ba}\label{bitonicSort_8c_a2b7a63a85ea0d65fe0e325fbb325c0ba}} 
+\index{bitonicSort.c@{bitonicSort.c}!imperativeBitonicSort@{imperativeBitonicSort}}
+\index{imperativeBitonicSort@{imperativeBitonicSort}!bitonicSort.c@{bitonicSort.c}}
+\doxysubsubsection{\texorpdfstring{imperativeBitonicSort()}{imperativeBitonicSort()}}
+{\footnotesize\ttfamily void imperative\+Bitonic\+Sort (\begin{DoxyParamCaption}\item[{int $\ast$}]{array,  }\item[{int}]{N,  }\item[{int}]{start\+Index,  }\item[{int}]{end\+Index }\end{DoxyParamCaption})}
+
+
+
+implementation of the imperitive bitonic sort -\/ descending order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array of numbers to be sorted \\
+\hline
+{\em N} & length of the array \\
+\hline
+{\em start\+Index} & index where sub-\/sequence starts \\
+\hline
+{\em end\+Index} & index where sub-\/sequence ends \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{bitonicSort_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{bitonicSort_8c_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{bitonicSort.c@{bitonicSort.c}!main@{main}}
+\index{main@{main}!bitonicSort.c@{bitonicSort.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main thread. 
+
+1 -\/-\/\texorpdfstring{$>$}{>} Checks if it has received the adequate number of arguments 2 -\/-\/\texorpdfstring{$>$}{>} Check the validity of the arguments it has received 3 -\/-\/\texorpdfstring{$>$}{>} Allocate memory for the necessary data structures 4 -\/-\/\texorpdfstring{$>$}{>} Initialize Distributor thread 5 -\/-\/\texorpdfstring{$>$}{>} Initialize Worker threads 6 -\/-\/\texorpdfstring{$>$}{>} Wait for Distributor thread to finish 7 -\/-\/\texorpdfstring{$>$}{>} Wait for Worker threads to finish 8 -\/-\/\texorpdfstring{$>$}{>} Check if the sequence is correctly sorted 9 -\/-\/\texorpdfstring{$>$}{>} Print elapsed time
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of words of the command line \\
+\hline
+{\em argv} & list of words of the command line\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+status of operation 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bitonicSort_8c_ac69842f6331dc8fc281cb654cb0f7533}\label{bitonicSort_8c_ac69842f6331dc8fc281cb654cb0f7533}} 
+\index{bitonicSort.c@{bitonicSort.c}!merge@{merge}}
+\index{merge@{merge}!bitonicSort.c@{bitonicSort.c}}
+\doxysubsubsection{\texorpdfstring{merge()}{merge()}}
+{\footnotesize\ttfamily void merge (\begin{DoxyParamCaption}\item[{int $\ast$}]{array,  }\item[{int}]{N,  }\item[{int}]{start\+Index,  }\item[{int}]{end\+Index }\end{DoxyParamCaption})}
+
+
+
+implements bitonic merge 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array of numbers to be sorted \\
+\hline
+{\em N} & length of the array \\
+\hline
+{\em start\+Index} & index where sub-\/sequence starts \\
+\hline
+{\em end\+Index} & index where sub-\/sequence ends \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{bitonicSort_8c_aed9d8febd3d892a914b0989f01bde7f4}\label{bitonicSort_8c_aed9d8febd3d892a914b0989f01bde7f4}} 
+\index{bitonicSort.c@{bitonicSort.c}!worker@{worker}}
+\index{worker@{worker}!bitonicSort.c@{bitonicSort.c}}
+\doxysubsubsection{\texorpdfstring{worker()}{worker()}}
+{\footnotesize\ttfamily void $\ast$ worker (\begin{DoxyParamCaption}\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Definition of distributor thread. 
+
+Its role is to simulate the life cycle of a distributor.
+
+
+\begin{DoxyParams}{Parameters}
+{\em par} & pointer to application defined worker identification \\
+\hline
+\end{DoxyParams}
