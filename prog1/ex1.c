@@ -228,12 +228,22 @@ void cli_parser(int argc, char *argv[])
                 fprintf(stderr, "Error: -t flag can only be used once\n");
                 exit(EXIT_FAILURE);
             }
+            if (atoi(optarg) <= 0)
+            {
+                fprintf(stderr, "Error: -t flag must be a positive integer\n");
+                exit(EXIT_FAILURE);
+            }
             t_flag = 1;
             nThreads = atoi(optarg);
             break;
         case 'b':
             if(b_flag == 1){
                 fprintf(stderr, "Error: -b flag can only be used once\n");
+                exit(EXIT_FAILURE);
+            }
+            if (atoi(optarg) <= 0)
+            {
+                fprintf(stderr, "Error: -b flag must be a positive integer\n");
                 exit(EXIT_FAILURE);
             }
             b_flag = 1;
