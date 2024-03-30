@@ -9,7 +9,7 @@ compile_output=$(gcc prog1/ex1.c prog1/sharedRegion.c prog1/utils.c -Wall -O3 -o
 
 if [ $? -eq 0 ]; then
     printf "Compilation successful\n\n"
-    time ./prog1/ex1 "$@"
+    ./prog1/ex1 "$@"
 else
     printf "Compilation failed\n\n"
 fi

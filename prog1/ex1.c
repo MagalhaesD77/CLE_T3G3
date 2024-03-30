@@ -1,38 +1,83 @@
+/**
+ *  \file ex1.c (implementation file)
+ *
+ *  \brief Problem name: Portuguese Text processing.
+ * 
+ *  Constants used in the program.
+ *
+ *  Problem main parameters.
+ *     \li N_THREADS_DEFAULT
+ *     \li BUFFER_SIZE_DEFAULT.
+ *
+ *  Definition of the initial operations carried out by the main / worker threads:
+ *     \li cli_parser
+ *     \li printUsage
+ *     \li worker.
+ *
+ *  \author Diogo Magalhães & Rafael Gil - March 2024
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <pthread.h>
 #include <libgen.h>
-#include <math.h>
 #include <time.h>
 #include <getopt.h>
-
-#include <stdlib.h> // For exit() function, might be removed later
+#include <stdlib.h>
 
 #include "constants.h"
 #include "sharedRegion.h"
 #include "utils.h"
 
-
-// variables that should be passed by argument
+/** \brief buffer size */
 int bufferSize;
+
+/** \brief number of threads */
 int nThreads;
+
+/** \brief number of files */
 extern int numFiles;
+
+/** \brief worker threads return status array */
 int *workerStatus;
 
 
+
+/** \brief array with codes of alphanumeric characters and underscore */
 extern char alphanumeric_chars_underscore;
+
+/** \brief size of the alphanumeric characters and underscore array */
 extern int alphanumeric_chars_underscore_array_size;
+
+/** \brief array with codes of consonants */
 extern char consonants;
+
+/** \brief size of the consonants array */
 extern int consonants_array_size;
+
+/** \brief array with codes of outside word characters */
 extern char outside_word_chars;
+
+/** \brief size of the outside word characters array */
 extern int outside_word_array_size;
-extern char c3_bytes_to_char;
-extern char e2_2_bytes_to_char;
+
+/** \brief execution time measurement */
+static double get_delta_time(void);
 
 
-/** \brief worker life cycle routine */
-static void *worker (void *id);
+
+/**
+ *  \brief Main thread.
+ *
+ *  Its role is creating the threads that will process the files and count the words
+ *  and multi consonant words, and wait for them to finish to output the results.
+ *
+ *  \param argc number of words of the command line
+ *  \param argv list of words of the command line
+ *
+ *  \return status of operation
+ */
 
 int main(int argc, char *argv[])
 {
@@ -41,11 +86,8 @@ int main(int argc, char *argv[])
 
     // 1. Parse the command line arguments
     cli_parser(argc, argv);
-
-        // Print the file names
-        // printFileNames();
-        // printArguments();
     
+    (void) get_delta_time ();
     // 2. to create the worker threads
     pthread_t workers[nThreads];
     for (int i = 0; i < nThreads; i++)
@@ -70,35 +112,35 @@ int main(int argc, char *argv[])
         }
     }
 
+    double elapsed_time = get_delta_time ();
+
     // 4. Join the results from the worker threads for each file and Print the results
-    for (int i = 0; i < numFiles; i++)
-    {
-        int totalWords = 0;
-        int totalMultiConsWords = 0;
-        for (int j = 0; j < nThreads; j++)
-        {
-            totalWords += get_thread_words_count(j, i);
-            totalMultiConsWords += get_thread_multi_cons_words_count(j, i);
-        }
-
-        printf("File name: %d\nTotal number words = %d\nTotal number of words with at least two instances of the same consonant = %d\n", i, totalWords, totalMultiConsWords);
-    }
-
+    joinResults();
+    printResults();
+    printf ("Elapsed time = %.6f s\n", elapsed_time);
 
     return 0;
 }
+
+
+
+/**
+ *  \brief Worker Thread Function.
+ *
+ *  \param prodId producer identification
+ *  \param val value to be stored
+ */
 
 static void *worker (void *data)
 {
     struct workerData *workerData = (struct workerData *)data;
     int id = workerData->id;
-    // printf("Worker %d\n", id);
     
     char buffer[bufferSize];
     int returnStatus, currentFile;
     char word_chars[consonants_array_size];
 
-    while(true){
+    while(1){
 
         // Clear the buffer
         memset(buffer, '\0', sizeof(buffer));
@@ -108,8 +150,6 @@ static void *worker (void *data)
         // returnStatus: 0 - Success, 1 - No more data, 2 - Error (Retry again)
         if (returnStatus == 0){
             // Process the data
-            
-            // char read_next_char_from_array(const char *array, int *index, int array_size);
             char c;
             int index = 0;
             int count_word = 0;
@@ -161,7 +201,7 @@ static void *worker (void *data)
 
             }
 
-            add_thread_counts(id, currentFile, count_word, count_two_consoant_words);
+            add_thread_counts(id, count_word, count_two_consoant_words);
             continue;
         }
         if (returnStatus == 1){
@@ -177,6 +217,12 @@ static void *worker (void *data)
     pthread_exit (&workerStatus[id]);
 }
 
+/**
+ *  \brief Argument Parser.
+ *
+ *  \param argc number of command line arguments
+ *  \param argv array of command line arguments
+ */
 
 void cli_parser(int argc, char *argv[])
 {
@@ -248,6 +294,11 @@ void cli_parser(int argc, char *argv[])
     
 }
 
+/**
+ *  \brief Print Usage of the program.
+ *
+ *  \param cmdName command name
+ */
 
 static void printUsage (char *cmdName)
 {
@@ -257,4 +308,23 @@ static void printUsage (char *cmdName)
            "  -t nThreads   --- set the number of threads to be created (default: 4)\n"
            "  -b bufferSize --- set the buffer size (default: 8192)\n"
            "  -h            --- print this help\n", cmdName);
+}
+
+/**
+ *  \brief Get the process time that has elapsed since last call of this time.
+ *
+ *  \return process elapsed time
+ */
+
+static double get_delta_time(void)
+{
+  static struct timespec t0, t1;
+
+  t0 = t1;
+  if(clock_gettime (CLOCK_MONOTONIC, &t1) != 0)
+  {
+    perror ("clock_gettime");
+    exit(1);
+  }
+  return (double) (t1.tv_sec - t0.tv_sec) + 1.0e-9 * (double) (t1.tv_nsec - t0.tv_nsec);
 }

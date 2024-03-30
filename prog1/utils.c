@@ -1,32 +1,63 @@
+/**
+ *  \file utils.h (interface file)
+ *
+ *  \brief Problem name: Portuguese Text processing.
+ *
+ *  Text processing utility functions.
+ *
+ *  Definition of the initial operations carried out by the main / worker threads:
+ *     \li find_last_outside_word_char_position
+ *     \li convert_to_char
+ *     \li read_next_char_from_array
+ *     \li bytes_to_read
+ *     \li init_c3_bytes_to_char
+ *     \li init_e2_2_bytes_to_char
+ *     \li contains
+ *     \li add
+ *
+ *  \author Diogo Magalhães & Rafael Gil - March 2024
+ */
+
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <pthread.h>
-#include <errno.h>
 
 #include "utils.h"
 
 
-
-// Global variables
+/** \brief array with codes of alphanumeric characters and underscore */
 char alphanumeric_chars_underscore[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'};
+
+/** \brief size of the alphanumeric characters and underscore array */
 int alphanumeric_chars_underscore_array_size = sizeof(alphanumeric_chars_underscore)/sizeof(char);
 
+/** \brief array with codes of consonants */
 char consonants[] = {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'};
+
+/** \brief size of the consonants array */
 int consonants_array_size = sizeof(consonants)/sizeof(char);
 
-char outside_word_chars[] = {0x20, 0x9, 0xD, 0xA, 0x2d, 0x22, 0x5b, 0x5d, 0x28, 0x29, 0x2e, 0x2c, 0x3a, 0x3b, 0x3f, 0x21};  // Contains white space symbols (From 0x20 to 0xA), separation symbols (From 0x2d to 0x29 ), punctuation symbols (From 0x2e to 0x21)
+/** \brief array with codes of outside word characters */
+char outside_word_chars[] = {0x20, 0x9, 0xD, 0xA, 0x2d, 0x22, 0x5b, 0x5d, 0x28, 0x29, 0x2e, 0x2c, 0x3a, 0x3b, 0x3f, 0x21};
+
+/** \brief size of the outside word characters array */
 int outside_word_array_size = sizeof(outside_word_chars)/sizeof(char);
 
-// Conversion tables
+/** \brief array with conversion of multiple bytes, starting with 0xc3 byte, chars into single byte chars */
 char c3_bytes_to_char[256] = {};
+
+/** \brief array with conversion of multiple bytes, starting with 0xe2 byte, chars into single byte chars */
 char e2_2_bytes_to_char[256] = {};
 
 
+
+/**
+ *  \brief Find the last char position of the last full word in the buffer.
+ *
+ *  \param buffer buffer to find the last word position
+ *  \param buffer_size size of the buffer
+ */
 
 int find_last_outside_word_char_position(char *buffer, int buffer_size){
     int n = buffer_size - 1;
@@ -45,8 +76,7 @@ int find_last_outside_word_char_position(char *buffer, int buffer_size){
 
         // Read more bytes if necessary
         int read_bytes = bytes_to_read(c[0]);
-        // printf("Quantity of bytes to read: %d\n", read_bytes);
-        // printf("Bytes to read: %d\n", read_bytes);
+        
         for(int i = 1; i < read_bytes; i++){
             c[i] = buffer[n+i];
         }
@@ -66,6 +96,11 @@ int find_last_outside_word_char_position(char *buffer, int buffer_size){
     return -1;
 }
 
+/**
+ *  \brief Convert a list of char a single byte char.
+ *
+ *  \param c character to be converted
+ */
 
 char convert_to_char(char *c){
     // Convert to char
@@ -81,35 +116,14 @@ char convert_to_char(char *c){
     }
 }
 
-
-char read_next_char(FILE *file){
-    // Create clean 
-    char c[4] = {};
-    c[0] = fgetc(file);
-
-    // Check if EOF
-    if (c[0]==EOF){
-        return EOF;
-    }
-
-    // Read more bytes if necessary
-    int read_bytes = bytes_to_read(c[0]);
-    for(int i = 0; i < read_bytes - 1; i++){
-        c[i+1] = fgetc(file);
-    }
-
-    // Convert to char
-    switch ((unsigned char) c[0])
-    {
-    case 0xc3:
-        return c3_bytes_to_char[(unsigned char) c[1]];
-    case 0xe2:
-        return e2_2_bytes_to_char[(unsigned char) c[2]];
-    default:
-        // unicode letter
-        return c[0];
-    }
-}
+/**
+ *  \brief Read the next char from the array.
+ *
+ *  \param array array to work with
+ *  \param index pointer to start reading
+ *  \param array_size size of the array
+ * 
+ */
 
 char read_next_char_from_array(const char *array, int *index, int array_size){
     // Create clean 
@@ -140,7 +154,11 @@ char read_next_char_from_array(const char *array, int *index, int array_size){
     }
 }
 
-
+/**
+ *  \brief Return the number of extra bytes needed to read the full char.
+ *
+ *  \param c character
+ */
 
 int bytes_to_read(char c){
     //Return the number of set bytes
@@ -156,6 +174,9 @@ int bytes_to_read(char c){
     return count;
 }
 
+/**
+ *  \brief Initialize the c3 chars conversion array.
+ */
 
 void init_c3_bytes_to_char(){
     // Init array used for conversion of multiple bytes, starting with 0xc3 byte, chars into single byte chars
@@ -178,6 +199,10 @@ void init_c3_bytes_to_char(){
     c3_bytes_to_char[0x87] = 'C';
 }
 
+/**
+ *  \brief Initialize the e2 chars conversion array.
+ */
+
 void init_e2_2_bytes_to_char(){
     // Init array used for conversion of multiple bytes, starting with 0xe2 byte, chars into single byte chars
     e2_2_bytes_to_char[0x9c] = e2_2_bytes_to_char[0x9d] = 0x22;
@@ -188,6 +213,13 @@ void init_e2_2_bytes_to_char(){
 
 }
 
+/**
+ *  \brief Check if a char is in the array.
+ *
+ *  \param array array with content
+ *  \param array_size size of the array
+ *  \param c char to find
+ */
 
 int contains(char *array, int array_size, char c)
 {
@@ -202,6 +234,13 @@ int contains(char *array, int array_size, char c)
     return 0;
 }
 
+/**
+ *  \brief Add a char to the array.
+ *
+ *  \param array array to add the char
+ *  \param array_size size of the array
+ *  \param c char to add
+ */
 
 void add(char *array, int array_size, char c)
 {

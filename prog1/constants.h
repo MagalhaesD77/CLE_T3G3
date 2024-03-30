@@ -1,17 +1,24 @@
 /**
- *  \file ex1.h (interface file)
+ *  \file constants.h (interface file)
  *
  *  \brief Problem name: Portuguese Text processing.
+ * 
+ *  Constants used in the program.
  *
- *  Problem parameters.
+ *  Problem main parameters.
+ *     \li N_THREADS_DEFAULT
+ *     \li BUFFER_SIZE_DEFAULT.
+ *
+ *  Definition of the initial operations carried out by the main / worker threads:
+ *     \li cli_parser
+ *     \li printUsage
+ *     \li worker.
  *
  *  \author Diogo Magalhães & Rafael Gil - March 2024
  */
 
 #ifndef PROBCONST_H_
 #define PROBCONST_H_
-
-/* Generic parameters */
 
 /** \brief default size of reading buffer */
 #define BUFFER_SIZE_DEFAULT 8192;
@@ -20,26 +27,31 @@
 #define N_THREADS_DEFAULT 4;
 
 
-// Functions
-
 /**
  *  \brief Argument Parser.
- *
- *  Operation carried out by the main thread.
  *
  *  \param argc number of command line arguments
  *  \param argv array of command line arguments
  */
+
 void cli_parser(int argc, char *argv[]);
 
 /**
  *  \brief Print Usage of the program.
  *
- *  Operation carried out by the main thread.
- *
  *  \param cmdName command name
  */
+
 static void printUsage (char *cmdName);
+
+/**
+ *  \brief Worker Thread Function.
+ *
+ *  \param prodId producer identification
+ *  \param val value to be stored
+ */
+
+static void *worker (void *id);
 
 #endif /* PROBCONST_H_ */
 

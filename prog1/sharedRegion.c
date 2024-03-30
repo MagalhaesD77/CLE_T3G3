@@ -1,5 +1,5 @@
 /**
- *  \file sharedRegion.c (implementation file)
+ *  \file sharedRegion.h (implementation file)
  *
  *  \brief Problem name: Portuguese Text processing.
  *
@@ -8,20 +8,27 @@
  *  monitor of the Lampson / Redell type.
  *
  *  Data transfer region implemented as a monitor.
+ * 
+ *  Problem Data Structures.
+ *     \li customFile
+ *     \li workerData
  *
- *  Definition of the operations carried out by the producers / consumers:
- *     \li putVal
- *     \li getVal.
+ *  Definition of the operations carried out by the workers / main threads:
+ *     \li initializeCountings
+ *     \li add_file
+ *     \li joinResults
+ *     \li printResults
+ *     \li getData
+ *     \li mutex_lock
+ *     \li mutex_unlock
+ *     \li add_thread_counts
  *
  *  \author Diogo Magalhães & Rafael Gil - March 2024
  */
 
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
+#include <string.h>
 #include <pthread.h>
 #include <errno.h>
 
@@ -30,6 +37,9 @@
 
 /** \brief worker threads return status array */
 extern int *workerStatus;
+
+/** \brief worker threads current file array */
+int *workerFileStatus;
 
 /** \brief max number of bytes per chunk */
 extern int bufferSize;
@@ -43,8 +53,6 @@ int **wordsCount;
 /** \brief multi consonant words parcial results */
 int **multiConsWordsCount;
 
-
-// Real shared region variables
 /** \brief mutex to access the current files index */
 static pthread_mutex_t accessCR = PTHREAD_MUTEX_INITIALIZER;
 
@@ -58,24 +66,61 @@ int currFileIndex = 0;
 int numFiles = 0;
 
 
-void add_thread_counts(unsigned int workerId, int fileIndex, int words, int multiConsWords)
+
+/**
+ *  \brief Join the counting results from each thread for each file.
+ */
+
+void joinResults()
 {
-    wordsCount[fileIndex][workerId] += words;
-    multiConsWordsCount[fileIndex][workerId] += multiConsWords;
+    for (int i = 0; i < numFiles; i++)
+    {
+        // int totalWords = 0;
+        // int totalMultiConsWords = 0;
+        for (int j = 0; j < nThreads; j++)
+        {
+            files[i].numWords += wordsCount[i][j];
+            files[i].numMultiConsWords += multiConsWordsCount[i][j];
+        }
+    }
+}
+
+/**
+ *  \brief Print the results of the counting.
+ */
+
+void printResults()
+{
+    for (int i = 0; i < numFiles; i++)
+    {
+        printf("File name: %s\n", files[i].fileName);
+        printf("Total number words = %d\n", files[i].numWords);
+        printf("Total number of words with at least two instances of the same consonant = %d\n", files[i].numMultiConsWords);
+        printf("\n");
+    }
+}
+
+/**
+ *  \brief Add the partial counting results from a thread for a file to the shared region.
+ *
+ *  \param workerId worker identification
+ *  \param words number of words
+ *  \param multiConsWords number of words with at least two instances of the same consonant
+ */
+
+void add_thread_counts(unsigned int workerId, int words, int multiConsWords)
+{
+    wordsCount[workerFileStatus[workerId]][workerId] += words;
+    multiConsWordsCount[workerFileStatus[workerId]][workerId] += multiConsWords;
 
 }
 
-int get_thread_words_count(unsigned int workerId, int fileIndex)
-{
-    return wordsCount[fileIndex][workerId];
-}
-
-int get_thread_multi_cons_words_count(unsigned int workerId, int fileIndex)
-{
-    return multiConsWordsCount[fileIndex][workerId];
-}
+/**
+ *  \brief Initialize the counting arrays for the threads in the shared region.
+ */
 
 void initializeCountings(){
+    // Memory allocation for the wordsCount and multiConsWordsCount arrays
     wordsCount = (int **)malloc(numFiles * sizeof(int *));
     multiConsWordsCount = (int **)malloc(numFiles * sizeof(int *));
 
@@ -85,13 +130,24 @@ void initializeCountings(){
         multiConsWordsCount[i] = (int *)malloc(nThreads * sizeof(int));
     }
 
+    // Memory allocation for the workerFileStatus array
+    workerFileStatus = (int *)malloc(nThreads * sizeof(int));
+
 }
+
+/**
+ *  \brief Get next buffer of data from the active file in the shared region.
+ *
+ *  \param workerId worker identification
+ *  \param buffer buffer to store the data
+ *  \param returnStatus return status
+ */
 
 void getData(unsigned int workerId, char *buffer, int *returnStatus, int *currentFileIndex)
 {
     mutex_lock(&accessCR, workerId);
 
-    *currentFileIndex = currFileIndex;
+    workerFileStatus[workerId] = currFileIndex;
 
     if (currFileIndex >= numFiles)
     {
@@ -100,16 +156,12 @@ void getData(unsigned int workerId, char *buffer, int *returnStatus, int *curren
         return;
     }
 
-    // printf("Initial buffer: %s\n", buffer);
     size_t bytes_read = fread(buffer, 1, bufferSize, files[currFileIndex].file);
-    // printf("Buffer read: %s\n", buffer);
 
     // if EOF reached there is no need to find the last outside word char
     if (!feof(files[currFileIndex].file)){
 
         int file_pointer_change = find_last_outside_word_char_position(buffer, bytes_read);
-
-        // printf("File pointer change: %d\n", file_pointer_change);
 
         if (file_pointer_change == -1){
             printf("Error: Found word bigger than the size of the buffer. Please increase the buffer size.\n");
@@ -139,6 +191,12 @@ void getData(unsigned int workerId, char *buffer, int *returnStatus, int *curren
 
 }
 
+/**
+ *  \brief Lock the mutex.
+ *
+ *  \param mutex mutex to be locked
+ *  \param workerId worker identification
+ */
 
 void mutex_lock(pthread_mutex_t *mutex, unsigned int workerId){
     if ((workerStatus[workerId] = pthread_mutex_lock(mutex)) != 0) /* enter monitor */
@@ -151,6 +209,13 @@ void mutex_lock(pthread_mutex_t *mutex, unsigned int workerId){
 
 }
 
+/**
+ *  \brief Unlock the mutex.
+ *
+ *  \param mutex mutex to be unlocked
+ *  \param workerId worker identification
+ */
+
 void mutex_unlock(pthread_mutex_t *mutex, unsigned int workerId){
     if ((workerStatus[workerId] = pthread_mutex_unlock(mutex)) != 0) /* exit monitor */
     {
@@ -162,6 +227,11 @@ void mutex_unlock(pthread_mutex_t *mutex, unsigned int workerId){
 
 }
 
+/**
+ *  \brief Add a file to the shared region.
+ *
+ *  \param filename file to be added
+ */
 
 int add_file(char *fileName)
 {
@@ -187,25 +257,3 @@ int add_file(char *fileName)
 
     return 0;
 }
-
-void printFileNames()
-{
-    printf("%d files to process:\n", numFiles);
-    // Print the file names without using numFiles
-    for (int i = 0; i < numFiles; i++)
-    {
-        printf("%s\n", files[i].fileName);
-    }
-    
-}
-
-void printArguments()
-{
-    printf("Number of threads: %d\n", nThreads);
-    printf("Buffer size: %d\n", bufferSize);
-}
-
-
-
-
-
