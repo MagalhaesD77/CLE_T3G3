@@ -90,7 +90,7 @@ void printResults();
  *  \param returnStatus return status
  */
 
-void getData(unsigned int workerId, char *buffer, int *returnStatus, int *currentFileIndex);
+void getData(unsigned int workerId, char *buffer, int *returnStatus);
 
 /**
  *  \brief Lock the mutex.

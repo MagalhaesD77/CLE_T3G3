@@ -1,5 +1,5 @@
 /**
- *  \file sharedRegion.h (implementation file)
+ *  \file sharedRegion.c (implementation file)
  *
  *  \brief Problem name: Portuguese Text processing.
  *
@@ -94,6 +94,11 @@ void printResults()
     for (int i = 0; i < numFiles; i++)
     {
         printf("File name: %s\n", files[i].fileName);
+        if (files[i].failed){
+            printf("Error: File could not be processed\n");
+            printf("\n");
+            continue;
+        }
         printf("Total number words = %d\n", files[i].numWords);
         printf("Total number of words with at least two instances of the same consonant = %d\n", files[i].numMultiConsWords);
         printf("\n");
@@ -143,7 +148,7 @@ void initializeCountings(){
  *  \param returnStatus return status
  */
 
-void getData(unsigned int workerId, char *buffer, int *returnStatus, int *currentFileIndex)
+void getData(unsigned int workerId, char *buffer, int *returnStatus)
 {
     mutex_lock(&accessCR, workerId);
 
@@ -164,7 +169,6 @@ void getData(unsigned int workerId, char *buffer, int *returnStatus, int *curren
         int file_pointer_change = find_last_outside_word_char_position(buffer, bytes_read);
 
         if (file_pointer_change == -1){
-            printf("Error: Found word bigger than the size of the buffer. Please increase the buffer size.\n");
             // Maybe keep reading the word (Not adding the letters to buffer until a outside word char is found) (Need to check if two consonant word to change the word in the buffer if needed)
             files[currFileIndex].failed = 1;
             currFileIndex++;

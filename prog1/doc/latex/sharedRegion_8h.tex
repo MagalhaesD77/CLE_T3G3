@@ -7,7 +7,7 @@ Problem name\+: Portuguese Text processing.
 
 This graph shows which files directly or indirectly include this file\+:
 % FIG 0
-\doxysubsection*{Classes}
+\doxysubsection*{Data Structures}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structcustomFile}{custom\+File}}
@@ -28,7 +28,7 @@ void {\bfseries join\+Results} ()
 \mbox{\Hypertarget{sharedRegion_8h_a7227a27d959ebccebb6f10536cf4aa75}\label{sharedRegion_8h_a7227a27d959ebccebb6f10536cf4aa75}} 
 void {\bfseries print\+Results} ()
 \begin{DoxyCompactList}\small\item\em Print the results of the counting. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}{get\+Data}} (unsigned int worker\+Id, char $\ast$buffer, int $\ast$return\+Status, int $\ast$current\+File\+Index)
+void \mbox{\hyperlink{sharedRegion_8h_af1538322795e5d9e0dd94dc637d9b037}{get\+Data}} (unsigned int worker\+Id, char $\ast$buffer, int $\ast$return\+Status)
 \begin{DoxyCompactList}\small\item\em Get next buffer of data from the active file in the shared region. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{sharedRegion_8h_a17b3fbf8ac1bd578e64b30519d07016b}{mutex\+\_\+lock}} (pthread\+\_\+mutex\+\_\+t $\ast$mutex, unsigned int worker\+Id)
 \begin{DoxyCompactList}\small\item\em Lock the mutex. \end{DoxyCompactList}\item 
@@ -42,19 +42,6 @@ void \mbox{\hyperlink{sharedRegion_8h_a4db13233644521cac4a1e481596d65ef}{add\+\_
 Problem name\+: Portuguese Text processing. 
 
 (interface file)
-
-Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
-
-Data transfer region implemented as a monitor.
-
-Problem Data Structures. \begin{DoxyItemize}
-\item \mbox{\hyperlink{structcustomFile}{custom\+File}} \item \mbox{\hyperlink{structworkerData}{worker\+Data}}\end{DoxyItemize}
-Definition of the operations carried out by the workers / main threads\+: \begin{DoxyItemize}
-\item initialize\+Countings \item add\+\_\+file \item join\+Results \item print\+Results \item get\+Data \item mutex\+\_\+lock \item mutex\+\_\+unlock \item add\+\_\+thread\+\_\+counts\end{DoxyItemize}
-\begin{DoxyAuthor}{Author}
-Diogo Magalhães \& Rafael Gil -\/ March 2024
-\end{DoxyAuthor}
-(implementation file)
 
 Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
 
@@ -104,11 +91,11 @@ Add the partial counting results from a thread for a file to the shared region.
 {\em multi\+Cons\+Words} & number of words with at least two instances of the same consonant \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}\label{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}} 
+\mbox{\Hypertarget{sharedRegion_8h_af1538322795e5d9e0dd94dc637d9b037}\label{sharedRegion_8h_af1538322795e5d9e0dd94dc637d9b037}} 
 \index{sharedRegion.h@{sharedRegion.h}!getData@{getData}}
 \index{getData@{getData}!sharedRegion.h@{sharedRegion.h}}
 \doxysubsubsection{\texorpdfstring{getData()}{getData()}}
-{\footnotesize\ttfamily void get\+Data (\begin{DoxyParamCaption}\item[{unsigned int}]{worker\+Id,  }\item[{char $\ast$}]{buffer,  }\item[{int $\ast$}]{return\+Status,  }\item[{int $\ast$}]{current\+File\+Index }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void get\+Data (\begin{DoxyParamCaption}\item[{unsigned int}]{worker\+Id,  }\item[{char $\ast$}]{buffer,  }\item[{int $\ast$}]{return\+Status }\end{DoxyParamCaption})}
 
 
 

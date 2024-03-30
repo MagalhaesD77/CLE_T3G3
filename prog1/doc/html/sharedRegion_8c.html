@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Portuguese Text Processing: /home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-Projeto1/prog1/sharedRegion.h File Reference</title>
+<title>Portuguese Text Processing: /home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-Projeto1/prog1/sharedRegion.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,40 +67,29 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">sharedRegion.h File Reference</div></div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">sharedRegion.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>Problem name: Portuguese Text processing.  
 <a href="#details">More...</a></p>
-<div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;pthread.h&gt;</code><br />
+<code>#include &lt;errno.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="sharedRegion_8h_source.html">sharedRegion.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="utils_8h_source.html">utils.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for sharedRegion.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="sharedRegion_8h__dep__incl.png" border="0" usemap="#a_2home_2diogo_2Universidade_2Mestrado_21_xC2_xBAAno_22_xC2_xBASemestre_2CLE_2CLE-Projeto1_2prog1_2sharedRegion_8hdep" alt=""/></div>
+<div class="center"><img src="sharedRegion_8c__incl.png" border="0" usemap="#a_2home_2diogo_2Universidade_2Mestrado_21_xC2_xBAAno_22_xC2_xBASemestre_2CLE_2CLE-Projeto1_2prog1_2sharedRegion_8c" alt=""/></div>
 </div>
-</div>
-<p><a href="sharedRegion_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcustomFile.html">customFile</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom file structure.  <a href="structcustomFile.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structworkerData.html">workerData</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Worker data structure.  <a href="structworkerData.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9a22e628338c48ee5d42e5884d88bd91"><td class="memItemLeft" align="right" valign="top"><a id="a9a22e628338c48ee5d42e5884d88bd91" name="a9a22e628338c48ee5d42e5884d88bd91"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeCountings</b> ()</td></tr>
-<tr class="memdesc:a9a22e628338c48ee5d42e5884d88bd91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the counting arrays for the threads in the shared region. <br /></td></tr>
-<tr class="separator:a9a22e628338c48ee5d42e5884d88bd91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49bde40cb19d15b8321991b2de3a988d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8h.html#a49bde40cb19d15b8321991b2de3a988d">add_file</a> (char *fileName)</td></tr>
-<tr class="memdesc:a49bde40cb19d15b8321991b2de3a988d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a file to the shared region.  <a href="sharedRegion_8h.html#a49bde40cb19d15b8321991b2de3a988d">More...</a><br /></td></tr>
-<tr class="separator:a49bde40cb19d15b8321991b2de3a988d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac00102c9ffd0d7b1734b4cff343cd63"><td class="memItemLeft" align="right" valign="top"><a id="aac00102c9ffd0d7b1734b4cff343cd63" name="aac00102c9ffd0d7b1734b4cff343cd63"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>joinResults</b> ()</td></tr>
 <tr class="memdesc:aac00102c9ffd0d7b1734b4cff343cd63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join the counting results from each thread for each file. <br /></td></tr>
@@ -109,22 +98,66 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>joinResults</b> ()</t
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printResults</b> ()</td></tr>
 <tr class="memdesc:a7227a27d959ebccebb6f10536cf4aa75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the results of the counting. <br /></td></tr>
 <tr class="separator:a7227a27d959ebccebb6f10536cf4aa75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1538322795e5d9e0dd94dc637d9b037"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8h.html#af1538322795e5d9e0dd94dc637d9b037">getData</a> (unsigned int workerId, char *buffer, int *returnStatus)</td></tr>
-<tr class="memdesc:af1538322795e5d9e0dd94dc637d9b037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get next buffer of data from the active file in the shared region.  <a href="sharedRegion_8h.html#af1538322795e5d9e0dd94dc637d9b037">More...</a><br /></td></tr>
-<tr class="separator:af1538322795e5d9e0dd94dc637d9b037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17b3fbf8ac1bd578e64b30519d07016b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8h.html#a17b3fbf8ac1bd578e64b30519d07016b">mutex_lock</a> (pthread_mutex_t *mutex, unsigned int workerId)</td></tr>
-<tr class="memdesc:a17b3fbf8ac1bd578e64b30519d07016b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock the mutex.  <a href="sharedRegion_8h.html#a17b3fbf8ac1bd578e64b30519d07016b">More...</a><br /></td></tr>
-<tr class="separator:a17b3fbf8ac1bd578e64b30519d07016b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8b82334850dc23feba6af7970c1f5e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8h.html#af8b82334850dc23feba6af7970c1f5e0">mutex_unlock</a> (pthread_mutex_t *mutex, unsigned int workerId)</td></tr>
-<tr class="memdesc:af8b82334850dc23feba6af7970c1f5e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlock the mutex.  <a href="sharedRegion_8h.html#af8b82334850dc23feba6af7970c1f5e0">More...</a><br /></td></tr>
-<tr class="separator:af8b82334850dc23feba6af7970c1f5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4db13233644521cac4a1e481596d65ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8h.html#a4db13233644521cac4a1e481596d65ef">add_thread_counts</a> (unsigned int workerId, int words, int multiConsWords)</td></tr>
-<tr class="memdesc:a4db13233644521cac4a1e481596d65ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the partial counting results from a thread for a file to the shared region.  <a href="sharedRegion_8h.html#a4db13233644521cac4a1e481596d65ef">More...</a><br /></td></tr>
+<tr class="memitem:a4db13233644521cac4a1e481596d65ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#a4db13233644521cac4a1e481596d65ef">add_thread_counts</a> (unsigned int workerId, int words, int multiConsWords)</td></tr>
+<tr class="memdesc:a4db13233644521cac4a1e481596d65ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the partial counting results from a thread for a file to the shared region.  <a href="sharedRegion_8c.html#a4db13233644521cac4a1e481596d65ef">More...</a><br /></td></tr>
 <tr class="separator:a4db13233644521cac4a1e481596d65ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a22e628338c48ee5d42e5884d88bd91"><td class="memItemLeft" align="right" valign="top"><a id="a9a22e628338c48ee5d42e5884d88bd91" name="a9a22e628338c48ee5d42e5884d88bd91"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeCountings</b> ()</td></tr>
+<tr class="memdesc:a9a22e628338c48ee5d42e5884d88bd91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the counting arrays for the threads in the shared region. <br /></td></tr>
+<tr class="separator:a9a22e628338c48ee5d42e5884d88bd91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1538322795e5d9e0dd94dc637d9b037"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#af1538322795e5d9e0dd94dc637d9b037">getData</a> (unsigned int workerId, char *buffer, int *returnStatus)</td></tr>
+<tr class="memdesc:af1538322795e5d9e0dd94dc637d9b037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get next buffer of data from the active file in the shared region.  <a href="sharedRegion_8c.html#af1538322795e5d9e0dd94dc637d9b037">More...</a><br /></td></tr>
+<tr class="separator:af1538322795e5d9e0dd94dc637d9b037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17b3fbf8ac1bd578e64b30519d07016b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#a17b3fbf8ac1bd578e64b30519d07016b">mutex_lock</a> (pthread_mutex_t *mutex, unsigned int workerId)</td></tr>
+<tr class="memdesc:a17b3fbf8ac1bd578e64b30519d07016b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock the mutex.  <a href="sharedRegion_8c.html#a17b3fbf8ac1bd578e64b30519d07016b">More...</a><br /></td></tr>
+<tr class="separator:a17b3fbf8ac1bd578e64b30519d07016b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b82334850dc23feba6af7970c1f5e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#af8b82334850dc23feba6af7970c1f5e0">mutex_unlock</a> (pthread_mutex_t *mutex, unsigned int workerId)</td></tr>
+<tr class="memdesc:af8b82334850dc23feba6af7970c1f5e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlock the mutex.  <a href="sharedRegion_8c.html#af8b82334850dc23feba6af7970c1f5e0">More...</a><br /></td></tr>
+<tr class="separator:af8b82334850dc23feba6af7970c1f5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49bde40cb19d15b8321991b2de3a988d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#a49bde40cb19d15b8321991b2de3a988d">add_file</a> (char *fileName)</td></tr>
+<tr class="memdesc:a49bde40cb19d15b8321991b2de3a988d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a file to the shared region.  <a href="sharedRegion_8c.html#a49bde40cb19d15b8321991b2de3a988d">More...</a><br /></td></tr>
+<tr class="separator:a49bde40cb19d15b8321991b2de3a988d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:acd868b85af9beb3eebfabdeeaa1930de"><td class="memItemLeft" align="right" valign="top"><a id="acd868b85af9beb3eebfabdeeaa1930de" name="acd868b85af9beb3eebfabdeeaa1930de"></a>
+int *&#160;</td><td class="memItemRight" valign="bottom"><b>workerStatus</b></td></tr>
+<tr class="memdesc:acd868b85af9beb3eebfabdeeaa1930de"><td class="mdescLeft">&#160;</td><td class="mdescRight">worker threads return status array <br /></td></tr>
+<tr class="separator:acd868b85af9beb3eebfabdeeaa1930de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a505ef4892472218f497bab84ba8dcfa9"><td class="memItemLeft" align="right" valign="top"><a id="a505ef4892472218f497bab84ba8dcfa9" name="a505ef4892472218f497bab84ba8dcfa9"></a>
+int *&#160;</td><td class="memItemRight" valign="bottom"><b>workerFileStatus</b></td></tr>
+<tr class="memdesc:a505ef4892472218f497bab84ba8dcfa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">worker threads current file array <br /></td></tr>
+<tr class="separator:a505ef4892472218f497bab84ba8dcfa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8556d19b129aa550f5b2819ed0320e83"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#a8556d19b129aa550f5b2819ed0320e83">bufferSize</a></td></tr>
+<tr class="memdesc:a8556d19b129aa550f5b2819ed0320e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">max number of bytes per chunk  <a href="sharedRegion_8c.html#a8556d19b129aa550f5b2819ed0320e83">More...</a><br /></td></tr>
+<tr class="separator:a8556d19b129aa550f5b2819ed0320e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8adda9db6d1fb7be6f86999c24c75ab0"><td class="memItemLeft" align="right" valign="top"><a id="a8adda9db6d1fb7be6f86999c24c75ab0" name="a8adda9db6d1fb7be6f86999c24c75ab0"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>nThreads</b></td></tr>
+<tr class="memdesc:a8adda9db6d1fb7be6f86999c24c75ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of threads <br /></td></tr>
+<tr class="separator:a8adda9db6d1fb7be6f86999c24c75ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3398b7c83dae999ec09d22d5e2d07e82"><td class="memItemLeft" align="right" valign="top"><a id="a3398b7c83dae999ec09d22d5e2d07e82" name="a3398b7c83dae999ec09d22d5e2d07e82"></a>
+int **&#160;</td><td class="memItemRight" valign="bottom"><b>wordsCount</b></td></tr>
+<tr class="memdesc:a3398b7c83dae999ec09d22d5e2d07e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">words parcial results <br /></td></tr>
+<tr class="separator:a3398b7c83dae999ec09d22d5e2d07e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ff3a84885d09d57c0f848211a89893"><td class="memItemLeft" align="right" valign="top"><a id="aa4ff3a84885d09d57c0f848211a89893" name="aa4ff3a84885d09d57c0f848211a89893"></a>
+int **&#160;</td><td class="memItemRight" valign="bottom"><b>multiConsWordsCount</b></td></tr>
+<tr class="memdesc:aa4ff3a84885d09d57c0f848211a89893"><td class="mdescLeft">&#160;</td><td class="mdescRight">multi consonant words parcial results <br /></td></tr>
+<tr class="separator:aa4ff3a84885d09d57c0f848211a89893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b14a55a3b34f1fa66cf40db2c380d45"><td class="memItemLeft" align="right" valign="top"><a id="a3b14a55a3b34f1fa66cf40db2c380d45" name="a3b14a55a3b34f1fa66cf40db2c380d45"></a>
+struct <a class="el" href="structcustomFile.html">customFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>files</b></td></tr>
+<tr class="memdesc:a3b14a55a3b34f1fa66cf40db2c380d45"><td class="mdescLeft">&#160;</td><td class="mdescRight">storage region <br /></td></tr>
+<tr class="separator:a3b14a55a3b34f1fa66cf40db2c380d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05e55b0ae2330d96985d927d82c56473"><td class="memItemLeft" align="right" valign="top"><a id="a05e55b0ae2330d96985d927d82c56473" name="a05e55b0ae2330d96985d927d82c56473"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>currFileIndex</b> = 0</td></tr>
+<tr class="memdesc:a05e55b0ae2330d96985d927d82c56473"><td class="mdescLeft">&#160;</td><td class="mdescRight">current file index being processed <br /></td></tr>
+<tr class="separator:a05e55b0ae2330d96985d927d82c56473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac55fe61967bfc3ea816d6d4ed88a142c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#ac55fe61967bfc3ea816d6d4ed88a142c">numFiles</a> = 0</td></tr>
+<tr class="memdesc:ac55fe61967bfc3ea816d6d4ed88a142c"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of files to process  <a href="sharedRegion_8c.html#ac55fe61967bfc3ea816d6d4ed88a142c">More...</a><br /></td></tr>
+<tr class="separator:ac55fe61967bfc3ea816d6d4ed88a142c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Problem name: Portuguese Text processing. </p>
-<p >(interface file)</p>
+<p >(implementation file)</p>
 <p >Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.</p>
 <p >Data transfer region implemented as a monitor.</p>
 <p >Problem Data Structures. </p><ul>
@@ -328,6 +361,49 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printResults</b> ()</
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a8556d19b129aa550f5b2819ed0320e83" name="a8556d19b129aa550f5b2819ed0320e83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8556d19b129aa550f5b2819ed0320e83">&#9670;&nbsp;</a></span>bufferSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int bufferSize</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>max number of bytes per chunk </p>
+<p >max number of bytes per chunk </p>
+
+</div>
+</div>
+<a id="ac55fe61967bfc3ea816d6d4ed88a142c" name="ac55fe61967bfc3ea816d6d4ed88a142c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac55fe61967bfc3ea816d6d4ed88a142c">&#9670;&nbsp;</a></span>numFiles</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int numFiles = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>number of files to process </p>
+<p >number of files </p>
 
 </div>
 </div>

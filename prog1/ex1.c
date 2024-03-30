@@ -44,24 +44,6 @@ int *workerStatus;
 
 
 
-/** \brief array with codes of alphanumeric characters and underscore */
-extern char alphanumeric_chars_underscore;
-
-/** \brief size of the alphanumeric characters and underscore array */
-extern int alphanumeric_chars_underscore_array_size;
-
-/** \brief array with codes of consonants */
-extern char consonants;
-
-/** \brief size of the consonants array */
-extern int consonants_array_size;
-
-/** \brief array with codes of outside word characters */
-extern char outside_word_chars;
-
-/** \brief size of the outside word characters array */
-extern int outside_word_array_size;
-
 /** \brief execution time measurement */
 static double get_delta_time(void);
 
@@ -137,7 +119,7 @@ static void *worker (void *data)
     int id = workerData->id;
     
     char buffer[bufferSize];
-    int returnStatus, currentFile;
+    int returnStatus;
     char word_chars[consonants_array_size];
 
     while(1){
@@ -146,7 +128,7 @@ static void *worker (void *data)
         memset(buffer, '\0', sizeof(buffer));
 
         // Get the data from the shared region
-        getData(id, buffer, &returnStatus, &currentFile);
+        getData(id, buffer, &returnStatus);
         // returnStatus: 0 - Success, 1 - No more data, 2 - Error (Retry again)
         if (returnStatus == 0){
             // Process the data
@@ -155,25 +137,25 @@ static void *worker (void *data)
             int count_word = 0;
             int count_two_consoant_words = 0;
             int two_consoant_bool = 0;
-            memset(word_chars, '\0', sizeof(word_chars));   // Clear the array
+            memset(word_chars, '\0', consonants_array_size);   // Clear the array
             int inside_word = 0;
             while ((c = read_next_char_from_array(buffer, &index, bufferSize)) != EOF)
             {
                 c = tolower(c);
 
                 // Check if char c is in outside_word_chars array
-                if (contains(&outside_word_chars, outside_word_array_size, c))
+                if (contains(outside_word_chars, outside_word_array_size, c))
                 {
                     if (inside_word != 0){
                         inside_word = 0;
                         two_consoant_bool = 0;
-                        memset(word_chars, '\0', sizeof(word_chars));   // Clear the array
+                        memset(word_chars, '\0', consonants_array_size);   // Clear the array
                     }
                 }
                 else
                 {   
                     // If it is a second consonant or if it is not an alphanumeric char or underscore, ignore it
-                    if (two_consoant_bool != 0 || contains(&alphanumeric_chars_underscore, alphanumeric_chars_underscore_array_size, c) == 0){
+                    if (two_consoant_bool != 0 || contains(alphanumeric_chars_underscore, alphanumeric_chars_underscore_array_size, c) == 0){
                         continue;
                     }
 
@@ -185,15 +167,15 @@ static void *worker (void *data)
                     }
 
                     // Check if consonant
-                    if (contains(&consonants, consonants_array_size, c)){
+                    if (contains(consonants, consonants_array_size, c)){
                         // if consonant, check if it is the second one
-                        if (contains(word_chars, sizeof(word_chars)/sizeof(char), c)){
+                        if (contains(word_chars, consonants_array_size, c)){
                             count_two_consoant_words++;
                             two_consoant_bool = 1;
                         }
                         else{
                             // add the caracter to the array
-                            add(word_chars, sizeof(word_chars)/sizeof(char), c);
+                            add(word_chars, consonants_array_size, c);
                         }
                     }
 
