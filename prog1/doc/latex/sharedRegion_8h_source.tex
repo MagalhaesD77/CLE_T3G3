@@ -1,0 +1,42 @@
+\hypertarget{sharedRegion_8h_source}{}\doxysection{shared\+Region.\+h}
+\label{sharedRegion_8h_source}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/sharedRegion.h@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/sharedRegion.h}}
+\mbox{\hyperlink{sharedRegion_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#ifndef SHAREDREGION\_H}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#define SHAREDREGION\_H}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 }
+\DoxyCodeLine{39 \textcolor{keyword}{struct }\mbox{\hyperlink{structcustomFile}{customFile}}}
+\DoxyCodeLine{40 \{}
+\DoxyCodeLine{41     FILE *file;}
+\DoxyCodeLine{42     \textcolor{keywordtype}{char} *fileName;}
+\DoxyCodeLine{43     \textcolor{keywordtype}{int} numWords;}
+\DoxyCodeLine{44     \textcolor{keywordtype}{int} numMultiConsWords;}
+\DoxyCodeLine{45     \textcolor{keywordtype}{int} failed;}
+\DoxyCodeLine{46 \};}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{54 \textcolor{keyword}{struct }\mbox{\hyperlink{structworkerData}{workerData}}}
+\DoxyCodeLine{55 \{}
+\DoxyCodeLine{56     \textcolor{keywordtype}{int} id;}
+\DoxyCodeLine{57 \};}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{63 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_a9a22e628338c48ee5d42e5884d88bd91}{initializeCountings}}();}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{71 \textcolor{keywordtype}{int} \mbox{\hyperlink{sharedRegion_8h_a49bde40cb19d15b8321991b2de3a988d}{add\_file}}(\textcolor{keywordtype}{char} *fileName);}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{77 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_aac00102c9ffd0d7b1734b4cff343cd63}{joinResults}}();}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{83 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_a7227a27d959ebccebb6f10536cf4aa75}{printResults}}();}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{93 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}{getData}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} workerId, \textcolor{keywordtype}{char} *buffer, \textcolor{keywordtype}{int} *returnStatus, \textcolor{keywordtype}{int} *currentFileIndex);}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{102 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_a17b3fbf8ac1bd578e64b30519d07016b}{mutex\_lock}}(pthread\_mutex\_t *mutex, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} workerId);}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{111 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_af8b82334850dc23feba6af7970c1f5e0}{mutex\_unlock}}(pthread\_mutex\_t *mutex, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} workerId);}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{121 \textcolor{keywordtype}{void} \mbox{\hyperlink{sharedRegion_8h_a4db13233644521cac4a1e481596d65ef}{add\_thread\_counts}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} workerId, \textcolor{keywordtype}{int} words, \textcolor{keywordtype}{int} multiConsWords);}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123 \textcolor{preprocessor}{\#endif }\textcolor{comment}{/* SHAREDREGION\_H */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

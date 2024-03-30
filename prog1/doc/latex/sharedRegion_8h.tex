@@ -1,0 +1,159 @@
+\hypertarget{sharedRegion_8h}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE-\/\+Projeto1/prog1/shared\+Region.h File Reference}
+\label{sharedRegion_8h}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/sharedRegion.h@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/sharedRegion.h}}
+
+
+Problem name\+: Portuguese Text processing.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+% FIG 0
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcustomFile}{custom\+File}}
+\begin{DoxyCompactList}\small\item\em Custom file structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structworkerData}{worker\+Data}}
+\begin{DoxyCompactList}\small\item\em Worker data structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{sharedRegion_8h_a9a22e628338c48ee5d42e5884d88bd91}\label{sharedRegion_8h_a9a22e628338c48ee5d42e5884d88bd91}} 
+void {\bfseries initialize\+Countings} ()
+\begin{DoxyCompactList}\small\item\em Initialize the counting arrays for the threads in the shared region. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{sharedRegion_8h_a49bde40cb19d15b8321991b2de3a988d}{add\+\_\+file}} (char $\ast$file\+Name)
+\begin{DoxyCompactList}\small\item\em Add a file to the shared region. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{sharedRegion_8h_aac00102c9ffd0d7b1734b4cff343cd63}\label{sharedRegion_8h_aac00102c9ffd0d7b1734b4cff343cd63}} 
+void {\bfseries join\+Results} ()
+\begin{DoxyCompactList}\small\item\em Join the counting results from each thread for each file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{sharedRegion_8h_a7227a27d959ebccebb6f10536cf4aa75}\label{sharedRegion_8h_a7227a27d959ebccebb6f10536cf4aa75}} 
+void {\bfseries print\+Results} ()
+\begin{DoxyCompactList}\small\item\em Print the results of the counting. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}{get\+Data}} (unsigned int worker\+Id, char $\ast$buffer, int $\ast$return\+Status, int $\ast$current\+File\+Index)
+\begin{DoxyCompactList}\small\item\em Get next buffer of data from the active file in the shared region. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sharedRegion_8h_a17b3fbf8ac1bd578e64b30519d07016b}{mutex\+\_\+lock}} (pthread\+\_\+mutex\+\_\+t $\ast$mutex, unsigned int worker\+Id)
+\begin{DoxyCompactList}\small\item\em Lock the mutex. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sharedRegion_8h_af8b82334850dc23feba6af7970c1f5e0}{mutex\+\_\+unlock}} (pthread\+\_\+mutex\+\_\+t $\ast$mutex, unsigned int worker\+Id)
+\begin{DoxyCompactList}\small\item\em Unlock the mutex. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sharedRegion_8h_a4db13233644521cac4a1e481596d65ef}{add\+\_\+thread\+\_\+counts}} (unsigned int worker\+Id, int words, int multi\+Cons\+Words)
+\begin{DoxyCompactList}\small\item\em Add the partial counting results from a thread for a file to the shared region. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Portuguese Text processing. 
+
+(interface file)
+
+Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
+
+Data transfer region implemented as a monitor.
+
+Problem Data Structures. \begin{DoxyItemize}
+\item \mbox{\hyperlink{structcustomFile}{custom\+File}} \item \mbox{\hyperlink{structworkerData}{worker\+Data}}\end{DoxyItemize}
+Definition of the operations carried out by the workers / main threads\+: \begin{DoxyItemize}
+\item initialize\+Countings \item add\+\_\+file \item join\+Results \item print\+Results \item get\+Data \item mutex\+\_\+lock \item mutex\+\_\+unlock \item add\+\_\+thread\+\_\+counts\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ March 2024
+\end{DoxyAuthor}
+(implementation file)
+
+Synchronization based on monitors. Both threads and the monitor are implemented using the pthread library which enables the creation of a monitor of the Lampson / Redell type.
+
+Data transfer region implemented as a monitor.
+
+Problem Data Structures. \begin{DoxyItemize}
+\item \mbox{\hyperlink{structcustomFile}{custom\+File}} \item \mbox{\hyperlink{structworkerData}{worker\+Data}}\end{DoxyItemize}
+Definition of the operations carried out by the workers / main threads\+: \begin{DoxyItemize}
+\item initialize\+Countings \item add\+\_\+file \item join\+Results \item print\+Results \item get\+Data \item mutex\+\_\+lock \item mutex\+\_\+unlock \item add\+\_\+thread\+\_\+counts\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ March 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{sharedRegion_8h_a49bde40cb19d15b8321991b2de3a988d}\label{sharedRegion_8h_a49bde40cb19d15b8321991b2de3a988d}} 
+\index{sharedRegion.h@{sharedRegion.h}!add\_file@{add\_file}}
+\index{add\_file@{add\_file}!sharedRegion.h@{sharedRegion.h}}
+\doxysubsubsection{\texorpdfstring{add\_file()}{add\_file()}}
+{\footnotesize\ttfamily int add\+\_\+file (\begin{DoxyParamCaption}\item[{char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Add a file to the shared region. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & file to be added \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{sharedRegion_8h_a4db13233644521cac4a1e481596d65ef}\label{sharedRegion_8h_a4db13233644521cac4a1e481596d65ef}} 
+\index{sharedRegion.h@{sharedRegion.h}!add\_thread\_counts@{add\_thread\_counts}}
+\index{add\_thread\_counts@{add\_thread\_counts}!sharedRegion.h@{sharedRegion.h}}
+\doxysubsubsection{\texorpdfstring{add\_thread\_counts()}{add\_thread\_counts()}}
+{\footnotesize\ttfamily void add\+\_\+thread\+\_\+counts (\begin{DoxyParamCaption}\item[{unsigned int}]{worker\+Id,  }\item[{int}]{words,  }\item[{int}]{multi\+Cons\+Words }\end{DoxyParamCaption})}
+
+
+
+Add the partial counting results from a thread for a file to the shared region. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worker\+Id} & worker identification \\
+\hline
+{\em words} & number of words \\
+\hline
+{\em multi\+Cons\+Words} & number of words with at least two instances of the same consonant \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}\label{sharedRegion_8h_aad2bcb0c42457c1ff6e3e734e64392db}} 
+\index{sharedRegion.h@{sharedRegion.h}!getData@{getData}}
+\index{getData@{getData}!sharedRegion.h@{sharedRegion.h}}
+\doxysubsubsection{\texorpdfstring{getData()}{getData()}}
+{\footnotesize\ttfamily void get\+Data (\begin{DoxyParamCaption}\item[{unsigned int}]{worker\+Id,  }\item[{char $\ast$}]{buffer,  }\item[{int $\ast$}]{return\+Status,  }\item[{int $\ast$}]{current\+File\+Index }\end{DoxyParamCaption})}
+
+
+
+Get next buffer of data from the active file in the shared region. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worker\+Id} & worker identification \\
+\hline
+{\em buffer} & buffer to store the data \\
+\hline
+{\em return\+Status} & return status \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{sharedRegion_8h_a17b3fbf8ac1bd578e64b30519d07016b}\label{sharedRegion_8h_a17b3fbf8ac1bd578e64b30519d07016b}} 
+\index{sharedRegion.h@{sharedRegion.h}!mutex\_lock@{mutex\_lock}}
+\index{mutex\_lock@{mutex\_lock}!sharedRegion.h@{sharedRegion.h}}
+\doxysubsubsection{\texorpdfstring{mutex\_lock()}{mutex\_lock()}}
+{\footnotesize\ttfamily void mutex\+\_\+lock (\begin{DoxyParamCaption}\item[{pthread\+\_\+mutex\+\_\+t $\ast$}]{mutex,  }\item[{unsigned int}]{worker\+Id }\end{DoxyParamCaption})}
+
+
+
+Lock the mutex. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & mutex to be locked \\
+\hline
+{\em worker\+Id} & worker identification \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{sharedRegion_8h_af8b82334850dc23feba6af7970c1f5e0}\label{sharedRegion_8h_af8b82334850dc23feba6af7970c1f5e0}} 
+\index{sharedRegion.h@{sharedRegion.h}!mutex\_unlock@{mutex\_unlock}}
+\index{mutex\_unlock@{mutex\_unlock}!sharedRegion.h@{sharedRegion.h}}
+\doxysubsubsection{\texorpdfstring{mutex\_unlock()}{mutex\_unlock()}}
+{\footnotesize\ttfamily void mutex\+\_\+unlock (\begin{DoxyParamCaption}\item[{pthread\+\_\+mutex\+\_\+t $\ast$}]{mutex,  }\item[{unsigned int}]{worker\+Id }\end{DoxyParamCaption})}
+
+
+
+Unlock the mutex. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & mutex to be unlocked \\
+\hline
+{\em worker\+Id} & worker identification \\
+\hline
+\end{DoxyParams}

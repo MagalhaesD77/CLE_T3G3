@@ -1,0 +1,160 @@
+\hypertarget{utils_8h}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE-\/\+Projeto1/prog1/utils.h File Reference}
+\label{utils_8h}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/utils.h@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/utils.h}}
+
+
+Problem name\+: Portuguese Text processing.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+% FIG 0
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{utils_8h_a2efbaa87153bbb933277bf6e1a706cb2}{find\+\_\+last\+\_\+outside\+\_\+word\+\_\+char\+\_\+position}} (char $\ast$buffer, int buffer\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Find the last char position of the last full word in the buffer. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{utils_8h_a104bba903b528d32b290832a3504917c}{convert\+\_\+to\+\_\+char}} (char $\ast$c)
+\begin{DoxyCompactList}\small\item\em Convert a list of char a single byte char. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{utils_8h_acfb9f381098c3966e64ee12a4168ae12}{read\+\_\+next\+\_\+char\+\_\+from\+\_\+array}} (const char $\ast$array, int $\ast$index, int array\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Read the next char from the array. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{utils_8h_aa453070238ec2934f8835a053c38e30d}{bytes\+\_\+to\+\_\+read}} (char c)
+\begin{DoxyCompactList}\small\item\em Return the number of extra bytes needed to read the full char. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{utils_8h_a13401bfd0ffa01491e147c66e09fba5e}\label{utils_8h_a13401bfd0ffa01491e147c66e09fba5e}} 
+void {\bfseries init\+\_\+c3\+\_\+bytes\+\_\+to\+\_\+char} ()
+\begin{DoxyCompactList}\small\item\em Initialize the c3 chars conversion array. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{utils_8h_a3dbdd823155803846c4cf92bffc39657}\label{utils_8h_a3dbdd823155803846c4cf92bffc39657}} 
+void {\bfseries init\+\_\+e2\+\_\+2\+\_\+bytes\+\_\+to\+\_\+char} ()
+\begin{DoxyCompactList}\small\item\em Initialize the e2 chars conversion array. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{utils_8h_ab25fd211c1e8f1999c3c3dc06bbf70c6}{contains}} (char $\ast$array, int array\+\_\+size, char c)
+\begin{DoxyCompactList}\small\item\em Check if a char is in the array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{utils_8h_a67805ef294dd750602f77a5ff066199e}{add}} (char $\ast$array, int array\+\_\+size, char c)
+\begin{DoxyCompactList}\small\item\em Add a char to the array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Portuguese Text processing. 
+
+(interface file)
+
+Text processing utility functions.
+
+Definition of the initial operations carried out by the main / worker threads\+: \begin{DoxyItemize}
+\item find\+\_\+last\+\_\+outside\+\_\+word\+\_\+char\+\_\+position \item convert\+\_\+to\+\_\+char \item read\+\_\+next\+\_\+char\+\_\+from\+\_\+array \item bytes\+\_\+to\+\_\+read \item init\+\_\+c3\+\_\+bytes\+\_\+to\+\_\+char \item init\+\_\+e2\+\_\+2\+\_\+bytes\+\_\+to\+\_\+char \item contains \item add\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ March 2024
+\end{DoxyAuthor}
+(implementation file)
+
+Text processing utility functions.
+
+Definition of the initial operations carried out by the main / worker threads\+: \begin{DoxyItemize}
+\item find\+\_\+last\+\_\+outside\+\_\+word\+\_\+char\+\_\+position \item convert\+\_\+to\+\_\+char \item read\+\_\+next\+\_\+char\+\_\+from\+\_\+array \item bytes\+\_\+to\+\_\+read \item init\+\_\+c3\+\_\+bytes\+\_\+to\+\_\+char \item init\+\_\+e2\+\_\+2\+\_\+bytes\+\_\+to\+\_\+char \item contains \item add\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ March 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{utils_8h_a67805ef294dd750602f77a5ff066199e}\label{utils_8h_a67805ef294dd750602f77a5ff066199e}} 
+\index{utils.h@{utils.h}!add@{add}}
+\index{add@{add}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily void add (\begin{DoxyParamCaption}\item[{char $\ast$}]{array,  }\item[{int}]{array\+\_\+size,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Add a char to the array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array to add the char \\
+\hline
+{\em array\+\_\+size} & size of the array \\
+\hline
+{\em c} & char to add \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{utils_8h_aa453070238ec2934f8835a053c38e30d}\label{utils_8h_aa453070238ec2934f8835a053c38e30d}} 
+\index{utils.h@{utils.h}!bytes\_to\_read@{bytes\_to\_read}}
+\index{bytes\_to\_read@{bytes\_to\_read}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{bytes\_to\_read()}{bytes\_to\_read()}}
+{\footnotesize\ttfamily int bytes\+\_\+to\+\_\+read (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Return the number of extra bytes needed to read the full char. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & character \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{utils_8h_ab25fd211c1e8f1999c3c3dc06bbf70c6}\label{utils_8h_ab25fd211c1e8f1999c3c3dc06bbf70c6}} 
+\index{utils.h@{utils.h}!contains@{contains}}
+\index{contains@{contains}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily int contains (\begin{DoxyParamCaption}\item[{char $\ast$}]{array,  }\item[{int}]{array\+\_\+size,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Check if a char is in the array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array with content \\
+\hline
+{\em array\+\_\+size} & size of the array \\
+\hline
+{\em c} & char to find \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{utils_8h_a104bba903b528d32b290832a3504917c}\label{utils_8h_a104bba903b528d32b290832a3504917c}} 
+\index{utils.h@{utils.h}!convert\_to\_char@{convert\_to\_char}}
+\index{convert\_to\_char@{convert\_to\_char}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{convert\_to\_char()}{convert\_to\_char()}}
+{\footnotesize\ttfamily char convert\+\_\+to\+\_\+char (\begin{DoxyParamCaption}\item[{char $\ast$}]{c }\end{DoxyParamCaption})}
+
+
+
+Convert a list of char a single byte char. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & character to be converted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{utils_8h_a2efbaa87153bbb933277bf6e1a706cb2}\label{utils_8h_a2efbaa87153bbb933277bf6e1a706cb2}} 
+\index{utils.h@{utils.h}!find\_last\_outside\_word\_char\_position@{find\_last\_outside\_word\_char\_position}}
+\index{find\_last\_outside\_word\_char\_position@{find\_last\_outside\_word\_char\_position}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{find\_last\_outside\_word\_char\_position()}{find\_last\_outside\_word\_char\_position()}}
+{\footnotesize\ttfamily int find\+\_\+last\+\_\+outside\+\_\+word\+\_\+char\+\_\+position (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer,  }\item[{int}]{buffer\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+Find the last char position of the last full word in the buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & buffer to find the last word position \\
+\hline
+{\em buffer\+\_\+size} & size of the buffer \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{utils_8h_acfb9f381098c3966e64ee12a4168ae12}\label{utils_8h_acfb9f381098c3966e64ee12a4168ae12}} 
+\index{utils.h@{utils.h}!read\_next\_char\_from\_array@{read\_next\_char\_from\_array}}
+\index{read\_next\_char\_from\_array@{read\_next\_char\_from\_array}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{read\_next\_char\_from\_array()}{read\_next\_char\_from\_array()}}
+{\footnotesize\ttfamily char read\+\_\+next\+\_\+char\+\_\+from\+\_\+array (\begin{DoxyParamCaption}\item[{const char $\ast$}]{array,  }\item[{int $\ast$}]{index,  }\item[{int}]{array\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+Read the next char from the array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array to work with \\
+\hline
+{\em index} & pointer to start reading \\
+\hline
+{\em array\+\_\+size} & size of the array \\
+\hline
+\end{DoxyParams}

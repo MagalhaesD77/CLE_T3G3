@@ -1,5 +1,5 @@
 /**
- *  \file utils.h (interface file)
+ *  \file utils.h (implementation file)
  *
  *  \brief Problem name: Portuguese Text processing.
  *
