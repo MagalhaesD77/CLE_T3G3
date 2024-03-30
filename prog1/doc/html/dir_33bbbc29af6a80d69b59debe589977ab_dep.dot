@@ -1,0 +1,15 @@
+digraph "/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_4643d4e0cec21e34da69a23af7aaf973 {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,dashed,", label="1ºAno", fontname="Helvetica", fontsize="10", URL="dir_4643d4e0cec21e34da69a23af7aaf973.html"]
+  subgraph clusterdir_33bbbc29af6a80d69b59debe589977ab {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,bold,", label="", fontname="Helvetica", fontsize="10", URL="dir_33bbbc29af6a80d69b59debe589977ab.html"]
+    dir_33bbbc29af6a80d69b59debe589977ab [shape=plaintext, label="2ºSemestre"];
+  dir_38bf5798338ebc472dd397432acf3f58 [shape=box, label="CLE", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_38bf5798338ebc472dd397432acf3f58.html"];
+  }
+  }
+}

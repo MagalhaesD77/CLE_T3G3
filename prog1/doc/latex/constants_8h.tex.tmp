@@ -1,0 +1,59 @@
+\hypertarget{constants_8h}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE-\/\+Projeto1/prog1/constants.h File Reference}
+\label{constants_8h}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/constants.h@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE-\/Projeto1/prog1/constants.h}}
+
+
+Problem name\+: Portuguese Text processing.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+% FIG 0
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{constants_8h_aba02eec807073b2458c435aa56d7f939}\label{constants_8h_aba02eec807073b2458c435aa56d7f939}} 
+\#define {\bfseries BUFFER\+\_\+\+SIZE\+\_\+\+DEFAULT}~8192;
+\begin{DoxyCompactList}\small\item\em default size of reading buffer \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{constants_8h_a0e431d030ca068adbd878af0e5635f52}\label{constants_8h_a0e431d030ca068adbd878af0e5635f52}} 
+\#define {\bfseries N\+\_\+\+THREADS\+\_\+\+DEFAULT}~4;
+\begin{DoxyCompactList}\small\item\em default number of worker threads \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{constants_8h_aec46e22e97b9aa92c7b779e945bd17ce}{cli\+\_\+parser}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Argument Parser. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Portuguese Text processing. 
+
+(interface file)
+
+Constants used in the program.
+
+Problem main parameters. \begin{DoxyItemize}
+\item N\+\_\+\+THREADS\+\_\+\+DEFAULT \item BUFFER\+\_\+\+SIZE\+\_\+\+DEFAULT.\end{DoxyItemize}
+Definition of the initial operations carried out by the main / worker threads\+: \begin{DoxyItemize}
+\item cli\+\_\+parser \item print\+Usage \item worker.\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ March 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{constants_8h_aec46e22e97b9aa92c7b779e945bd17ce}\label{constants_8h_aec46e22e97b9aa92c7b779e945bd17ce}} 
+\index{constants.h@{constants.h}!cli\_parser@{cli\_parser}}
+\index{cli\_parser@{cli\_parser}!constants.h@{constants.h}}
+\doxysubsubsection{\texorpdfstring{cli\_parser()}{cli\_parser()}}
+{\footnotesize\ttfamily void cli\+\_\+parser (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Argument Parser. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of command line arguments \\
+\hline
+{\em argv} & array of command line arguments \\
+\hline
+\end{DoxyParams}
