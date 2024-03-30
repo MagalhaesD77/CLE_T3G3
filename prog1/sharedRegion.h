@@ -120,4 +120,9 @@ void mutex_unlock(pthread_mutex_t *mutex, unsigned int workerId);
 
 void add_thread_counts(unsigned int workerId, int words, int multiConsWords);
 
+/**
+ * \brief clean-up function. release memory and destroy mutex and conditional variables
+*/
+extern void cleanup();
+
 #endif /* SHAREDREGION_H */

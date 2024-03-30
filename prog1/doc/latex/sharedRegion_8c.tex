@@ -35,33 +35,21 @@ void \mbox{\hyperlink{sharedRegion_8c_a17b3fbf8ac1bd578e64b30519d07016b}{mutex\+
 void \mbox{\hyperlink{sharedRegion_8c_af8b82334850dc23feba6af7970c1f5e0}{mutex\+\_\+unlock}} (pthread\+\_\+mutex\+\_\+t $\ast$mutex, unsigned int worker\+Id)
 \begin{DoxyCompactList}\small\item\em Unlock the mutex. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{sharedRegion_8c_a49bde40cb19d15b8321991b2de3a988d}{add\+\_\+file}} (char $\ast$file\+Name)
-\begin{DoxyCompactList}\small\item\em Add a file to the shared region. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Add a file to the shared region. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{sharedRegion_8c_a4b66d5e31b5dc18b314c8a68163263bd}\label{sharedRegion_8c_a4b66d5e31b5dc18b314c8a68163263bd}} 
+void {\bfseries cleanup} ()
+\begin{DoxyCompactList}\small\item\em clean-\/up function. release memory and destroy mutex and conditional variables \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{sharedRegion_8c_acd868b85af9beb3eebfabdeeaa1930de}\label{sharedRegion_8c_acd868b85af9beb3eebfabdeeaa1930de}} 
 int $\ast$ {\bfseries worker\+Status}
 \begin{DoxyCompactList}\small\item\em worker threads return status array \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{sharedRegion_8c_a505ef4892472218f497bab84ba8dcfa9}\label{sharedRegion_8c_a505ef4892472218f497bab84ba8dcfa9}} 
-int $\ast$ {\bfseries worker\+File\+Status}
-\begin{DoxyCompactList}\small\item\em worker threads current file array \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{sharedRegion_8c_a8556d19b129aa550f5b2819ed0320e83}{buffer\+Size}}
 \begin{DoxyCompactList}\small\item\em max number of bytes per chunk \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{sharedRegion_8c_a8adda9db6d1fb7be6f86999c24c75ab0}\label{sharedRegion_8c_a8adda9db6d1fb7be6f86999c24c75ab0}} 
 int {\bfseries n\+Threads}
 \begin{DoxyCompactList}\small\item\em number of threads \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{sharedRegion_8c_a3398b7c83dae999ec09d22d5e2d07e82}\label{sharedRegion_8c_a3398b7c83dae999ec09d22d5e2d07e82}} 
-int $\ast$$\ast$ {\bfseries words\+Count}
-\begin{DoxyCompactList}\small\item\em words parcial results \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{sharedRegion_8c_aa4ff3a84885d09d57c0f848211a89893}\label{sharedRegion_8c_aa4ff3a84885d09d57c0f848211a89893}} 
-int $\ast$$\ast$ {\bfseries multi\+Cons\+Words\+Count}
-\begin{DoxyCompactList}\small\item\em multi consonant words parcial results \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{sharedRegion_8c_a3b14a55a3b34f1fa66cf40db2c380d45}\label{sharedRegion_8c_a3b14a55a3b34f1fa66cf40db2c380d45}} 
-struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$ {\bfseries files}
-\begin{DoxyCompactList}\small\item\em storage region \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{sharedRegion_8c_a05e55b0ae2330d96985d927d82c56473}\label{sharedRegion_8c_a05e55b0ae2330d96985d927d82c56473}} 
-int {\bfseries curr\+File\+Index} = 0
-\begin{DoxyCompactList}\small\item\em current file index being processed \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{sharedRegion_8c_ac55fe61967bfc3ea816d6d4ed88a142c}{num\+Files}} = 0
 \begin{DoxyCompactList}\small\item\em number of files to process \end{DoxyCompactList}\end{DoxyCompactItemize}
 

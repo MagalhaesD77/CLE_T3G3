@@ -117,6 +117,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeCountings</
 <tr class="memitem:a49bde40cb19d15b8321991b2de3a988d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#a49bde40cb19d15b8321991b2de3a988d">add_file</a> (char *fileName)</td></tr>
 <tr class="memdesc:a49bde40cb19d15b8321991b2de3a988d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a file to the shared region.  <a href="sharedRegion_8c.html#a49bde40cb19d15b8321991b2de3a988d">More...</a><br /></td></tr>
 <tr class="separator:a49bde40cb19d15b8321991b2de3a988d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b66d5e31b5dc18b314c8a68163263bd"><td class="memItemLeft" align="right" valign="top"><a id="a4b66d5e31b5dc18b314c8a68163263bd" name="a4b66d5e31b5dc18b314c8a68163263bd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>cleanup</b> ()</td></tr>
+<tr class="memdesc:a4b66d5e31b5dc18b314c8a68163263bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">clean-up function. release memory and destroy mutex and conditional variables <br /></td></tr>
+<tr class="separator:a4b66d5e31b5dc18b314c8a68163263bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -124,10 +128,6 @@ Variables</h2></td></tr>
 int *&#160;</td><td class="memItemRight" valign="bottom"><b>workerStatus</b></td></tr>
 <tr class="memdesc:acd868b85af9beb3eebfabdeeaa1930de"><td class="mdescLeft">&#160;</td><td class="mdescRight">worker threads return status array <br /></td></tr>
 <tr class="separator:acd868b85af9beb3eebfabdeeaa1930de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a505ef4892472218f497bab84ba8dcfa9"><td class="memItemLeft" align="right" valign="top"><a id="a505ef4892472218f497bab84ba8dcfa9" name="a505ef4892472218f497bab84ba8dcfa9"></a>
-int *&#160;</td><td class="memItemRight" valign="bottom"><b>workerFileStatus</b></td></tr>
-<tr class="memdesc:a505ef4892472218f497bab84ba8dcfa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">worker threads current file array <br /></td></tr>
-<tr class="separator:a505ef4892472218f497bab84ba8dcfa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8556d19b129aa550f5b2819ed0320e83"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#a8556d19b129aa550f5b2819ed0320e83">bufferSize</a></td></tr>
 <tr class="memdesc:a8556d19b129aa550f5b2819ed0320e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">max number of bytes per chunk  <a href="sharedRegion_8c.html#a8556d19b129aa550f5b2819ed0320e83">More...</a><br /></td></tr>
 <tr class="separator:a8556d19b129aa550f5b2819ed0320e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,22 +135,6 @@ int *&#160;</td><td class="memItemRight" valign="bottom"><b>workerFileStatus</b>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>nThreads</b></td></tr>
 <tr class="memdesc:a8adda9db6d1fb7be6f86999c24c75ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of threads <br /></td></tr>
 <tr class="separator:a8adda9db6d1fb7be6f86999c24c75ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3398b7c83dae999ec09d22d5e2d07e82"><td class="memItemLeft" align="right" valign="top"><a id="a3398b7c83dae999ec09d22d5e2d07e82" name="a3398b7c83dae999ec09d22d5e2d07e82"></a>
-int **&#160;</td><td class="memItemRight" valign="bottom"><b>wordsCount</b></td></tr>
-<tr class="memdesc:a3398b7c83dae999ec09d22d5e2d07e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">words parcial results <br /></td></tr>
-<tr class="separator:a3398b7c83dae999ec09d22d5e2d07e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4ff3a84885d09d57c0f848211a89893"><td class="memItemLeft" align="right" valign="top"><a id="aa4ff3a84885d09d57c0f848211a89893" name="aa4ff3a84885d09d57c0f848211a89893"></a>
-int **&#160;</td><td class="memItemRight" valign="bottom"><b>multiConsWordsCount</b></td></tr>
-<tr class="memdesc:aa4ff3a84885d09d57c0f848211a89893"><td class="mdescLeft">&#160;</td><td class="mdescRight">multi consonant words parcial results <br /></td></tr>
-<tr class="separator:aa4ff3a84885d09d57c0f848211a89893"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b14a55a3b34f1fa66cf40db2c380d45"><td class="memItemLeft" align="right" valign="top"><a id="a3b14a55a3b34f1fa66cf40db2c380d45" name="a3b14a55a3b34f1fa66cf40db2c380d45"></a>
-struct <a class="el" href="structcustomFile.html">customFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>files</b></td></tr>
-<tr class="memdesc:a3b14a55a3b34f1fa66cf40db2c380d45"><td class="mdescLeft">&#160;</td><td class="mdescRight">storage region <br /></td></tr>
-<tr class="separator:a3b14a55a3b34f1fa66cf40db2c380d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05e55b0ae2330d96985d927d82c56473"><td class="memItemLeft" align="right" valign="top"><a id="a05e55b0ae2330d96985d927d82c56473" name="a05e55b0ae2330d96985d927d82c56473"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>currFileIndex</b> = 0</td></tr>
-<tr class="memdesc:a05e55b0ae2330d96985d927d82c56473"><td class="mdescLeft">&#160;</td><td class="mdescRight">current file index being processed <br /></td></tr>
-<tr class="separator:a05e55b0ae2330d96985d927d82c56473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac55fe61967bfc3ea816d6d4ed88a142c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sharedRegion_8c.html#ac55fe61967bfc3ea816d6d4ed88a142c">numFiles</a> = 0</td></tr>
 <tr class="memdesc:ac55fe61967bfc3ea816d6d4ed88a142c"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of files to process  <a href="sharedRegion_8c.html#ac55fe61967bfc3ea816d6d4ed88a142c">More...</a><br /></td></tr>
 <tr class="separator:ac55fe61967bfc3ea816d6d4ed88a142c"><td class="memSeparator" colspan="2">&#160;</td></tr>

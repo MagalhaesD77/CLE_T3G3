@@ -39,7 +39,7 @@
 extern int *workerStatus;
 
 /** \brief worker threads current file array */
-int *workerFileStatus;
+static int *workerFileStatus;
 
 /** \brief max number of bytes per chunk */
 extern int bufferSize;
@@ -48,19 +48,19 @@ extern int bufferSize;
 extern int nThreads;
 
 /** \brief words parcial results */
-int **wordsCount;
+static int **wordsCount;
 
 /** \brief multi consonant words parcial results */
-int **multiConsWordsCount;
+static int **multiConsWordsCount;
 
 /** \brief mutex to access the current files index */
 static pthread_mutex_t accessCR = PTHREAD_MUTEX_INITIALIZER;
 
 /** \brief storage region */
-struct customFile *files;
+static struct customFile *files;
 
 /** \brief current file index being processed */
-int currFileIndex = 0;
+static int currFileIndex = 0;
 
 /** \brief number of files to process */
 int numFiles = 0;
@@ -260,4 +260,15 @@ int add_file(char *fileName)
     numFiles++;
 
     return 0;
+}
+
+/**
+ * \brief clean-up function. release memory and destroy mutex and conditional variables
+*/
+void cleanup(){
+    free(workerStatus);
+    free(workerFileStatus);
+    free(wordsCount);
+    free(multiConsWordsCount);
+    pthread_mutex_destroy(&accessCR);
 }

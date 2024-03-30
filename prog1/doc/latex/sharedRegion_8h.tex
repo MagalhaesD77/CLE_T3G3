@@ -35,7 +35,10 @@ void \mbox{\hyperlink{sharedRegion_8h_a17b3fbf8ac1bd578e64b30519d07016b}{mutex\+
 void \mbox{\hyperlink{sharedRegion_8h_af8b82334850dc23feba6af7970c1f5e0}{mutex\+\_\+unlock}} (pthread\+\_\+mutex\+\_\+t $\ast$mutex, unsigned int worker\+Id)
 \begin{DoxyCompactList}\small\item\em Unlock the mutex. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{sharedRegion_8h_a4db13233644521cac4a1e481596d65ef}{add\+\_\+thread\+\_\+counts}} (unsigned int worker\+Id, int words, int multi\+Cons\+Words)
-\begin{DoxyCompactList}\small\item\em Add the partial counting results from a thread for a file to the shared region. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Add the partial counting results from a thread for a file to the shared region. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{sharedRegion_8h_a4b66d5e31b5dc18b314c8a68163263bd}\label{sharedRegion_8h_a4b66d5e31b5dc18b314c8a68163263bd}} 
+void {\bfseries cleanup} ()
+\begin{DoxyCompactList}\small\item\em clean-\/up function. release memory and destroy mutex and conditional variables \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}

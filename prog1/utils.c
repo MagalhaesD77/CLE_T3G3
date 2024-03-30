@@ -25,24 +25,11 @@
 
 #include "utils.h"
 
-
-/** \brief array with codes of alphanumeric characters and underscore */
-char alphanumeric_chars_underscore[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'};
-
-/** \brief size of the alphanumeric characters and underscore array */
-int alphanumeric_chars_underscore_array_size = sizeof(alphanumeric_chars_underscore)/sizeof(char);
-
-/** \brief array with codes of consonants */
-char consonants[] = {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'};
-
-/** \brief size of the consonants array */
-int consonants_array_size = sizeof(consonants)/sizeof(char);
-
 /** \brief array with codes of outside word characters */
-char outside_word_chars[] = {0x20, 0x9, 0xD, 0xA, 0x2d, 0x22, 0x5b, 0x5d, 0x28, 0x29, 0x2e, 0x2c, 0x3a, 0x3b, 0x3f, 0x21};
+extern char outside_word_chars[];
 
 /** \brief size of the outside word characters array */
-int outside_word_array_size = sizeof(outside_word_chars)/sizeof(char);
+extern int outside_word_array_size;
 
 /** \brief array with conversion of multiple bytes, starting with 0xc3 byte, chars into single byte chars */
 char c3_bytes_to_char[256] = {};

@@ -21,25 +21,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-/** \brief array with codes of alphanumeric characters and underscore */
-extern char alphanumeric_chars_underscore[];
-
-/** \brief size of the alphanumeric characters and underscore array */
-extern int alphanumeric_chars_underscore_array_size;
-
-/** \brief array with codes of consonants */
-extern char consonants[];
-
-/** \brief size of the consonants array */
-extern int consonants_array_size;
-
-/** \brief array with codes of outside word characters */
-extern char outside_word_chars[];
-
-/** \brief size of the outside word characters array */
-extern int outside_word_array_size;
-
-
 /**
  *  \brief Find the last char position of the last full word in the buffer.
  *

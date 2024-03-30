@@ -44,6 +44,26 @@ int *workerStatus;
 
 
 
+/** \brief array with codes of alphanumeric characters and underscore */
+char alphanumeric_chars_underscore[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'};
+
+/** \brief size of the alphanumeric characters and underscore array */
+int alphanumeric_chars_underscore_array_size = sizeof(alphanumeric_chars_underscore)/sizeof(char);
+
+/** \brief array with codes of consonants */
+char consonants[] = {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'};
+
+/** \brief size of the consonants array */
+int consonants_array_size = sizeof(consonants)/sizeof(char);
+
+/** \brief array with codes of outside word characters */
+char outside_word_chars[] = {0x20, 0x9, 0xD, 0xA, 0x2d, 0x22, 0x5b, 0x5d, 0x28, 0x29, 0x2e, 0x2c, 0x3a, 0x3b, 0x3f, 0x21};
+
+/** \brief size of the outside word characters array */
+int outside_word_array_size = sizeof(outside_word_chars)/sizeof(char);
+
+
+
 /** \brief execution time measurement */
 static double get_delta_time(void);
 
@@ -99,6 +119,10 @@ int main(int argc, char *argv[])
     // 4. Join the results from the worker threads for each file and Print the results
     joinResults();
     printResults();
+
+    // free resources
+    cleanup();
+
     printf ("Elapsed time = %.6f s\n", elapsed_time);
 
     return 0;
@@ -120,7 +144,7 @@ static void *worker (void *data)
     
     char buffer[bufferSize];
     int returnStatus;
-    char word_chars[consonants_array_size];
+    char word_chars[sizeof(consonants)/sizeof(char)];
 
     while(1){
 
@@ -137,7 +161,7 @@ static void *worker (void *data)
             int count_word = 0;
             int count_two_consoant_words = 0;
             int two_consoant_bool = 0;
-            memset(word_chars, '\0', consonants_array_size);   // Clear the array
+            memset(word_chars, '\0', sizeof(word_chars));   // Clear the array
             int inside_word = 0;
             while ((c = read_next_char_from_array(buffer, &index, bufferSize)) != EOF)
             {
@@ -149,7 +173,7 @@ static void *worker (void *data)
                     if (inside_word != 0){
                         inside_word = 0;
                         two_consoant_bool = 0;
-                        memset(word_chars, '\0', consonants_array_size);   // Clear the array
+                        memset(word_chars, '\0', sizeof(word_chars));   // Clear the array
                     }
                 }
                 else
@@ -169,13 +193,13 @@ static void *worker (void *data)
                     // Check if consonant
                     if (contains(consonants, consonants_array_size, c)){
                         // if consonant, check if it is the second one
-                        if (contains(word_chars, consonants_array_size, c)){
+                        if (contains(word_chars, sizeof(word_chars)/sizeof(char), c)){
                             count_two_consoant_words++;
                             two_consoant_bool = 1;
                         }
                         else{
                             // add the caracter to the array
-                            add(word_chars, consonants_array_size, c);
+                            add(word_chars, sizeof(word_chars)/sizeof(char), c);
                         }
                     }
 
