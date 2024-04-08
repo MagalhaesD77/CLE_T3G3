@@ -1,3 +1,11 @@
+dataSet*/*.txt
+dataSet*/*.bin
+
+**/.vscode
+
+ex1
+ex2
+
 # Prerequisites
 *.d
 
