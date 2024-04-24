@@ -143,19 +143,14 @@ int main(int argc, char *argv[]) {
 	}
 
 
-
-    // start timer
-
-    (void) get_delta_time();
-
-
-
     if (rank == 0) {
 
         readFile(argv[1], &lenNumberArray, &numberArray);
 
     }
 
+    // start timer
+    (void) get_delta_time();
 
 
     // send the length to all processes
@@ -264,7 +259,11 @@ int main(int argc, char *argv[]) {
 
     }
 
+    // finish timer
 
+
+    printf ("\nElapsed time = %.6f s\n", get_delta_time ());
+    
 
     if(rank == 0){
 
@@ -277,12 +276,6 @@ int main(int argc, char *argv[]) {
         free(numberArray);
 
     }
-
-
-
-    // finish timer
-
-    printf ("\nElapsed time = %.6f s\n", get_delta_time ());
 
 
 
