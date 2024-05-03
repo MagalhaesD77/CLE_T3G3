@@ -1,0 +1,15 @@
+digraph "/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE_T3G3"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  compound=true
+  subgraph clusterdir_38bf5798338ebc472dd397432acf3f58 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", style="filled,dashed,", label="CLE", fontname="Helvetica", fontsize="10", URL="dir_38bf5798338ebc472dd397432acf3f58.html"]
+  subgraph clusterdir_fa2af4e9c1543e7a326aaeb9086e3a9d {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", style="filled,bold,", label="", fontname="Helvetica", fontsize="10", URL="dir_fa2af4e9c1543e7a326aaeb9086e3a9d.html"]
+    dir_fa2af4e9c1543e7a326aaeb9086e3a9d [shape=plaintext, label="CLE_T3G3"];
+  dir_23008a394111e2da4e52ce6dea7639d8 [shape=box, label="assignment2", style="filled,", fillcolor="#a2b4d6", color="grey25", URL="dir_23008a394111e2da4e52ce6dea7639d8.html"];
+  }
+  }
+}

@@ -5,7 +5,7 @@
  *
  *  Text processing utility functions.
  *
- *  Definition of the initial operations carried out by the main / worker threads:
+ *  Definition of the initial operations carried out by the dispatcher / worker processes:
  *     \li find_last_outside_word_char_position
  *     \li convert_to_char
  *     \li read_next_char_from_array

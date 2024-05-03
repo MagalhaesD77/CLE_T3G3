@@ -1,0 +1,159 @@
+\hypertarget{main_8h}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE\+\_\+\+T3\+G3/assignment2/prog1/main.h File Reference}
+\label{main_8h}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog1/main.h@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog1/main.h}}
+
+
+Problem name\+: Portuguese Text processing.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+% FIG 0
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcustomFile}{custom\+File}}
+\begin{DoxyCompactList}\small\item\em Custom file structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structworkerToDispatcherMessage}{worker\+To\+Dispatcher\+Message}}
+\begin{DoxyCompactList}\small\item\em Worker to Dispatcher Message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8h_aba02eec807073b2458c435aa56d7f939}\label{main_8h_aba02eec807073b2458c435aa56d7f939}} 
+\#define {\bfseries BUFFER\+\_\+\+SIZE\+\_\+\+DEFAULT}~8192;
+\begin{DoxyCompactList}\small\item\em default size of reading buffer \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8h_a9ddfe7994ae1124130928608f1711603}{cli\+\_\+parser}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]}, int $\ast$num\+Files, struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$$\ast$files, int $\ast$buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Argument Parser. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a38337d7e733dc222781d393a14b52731}{dispatcher}} (int rank, int size, int num\+Files, struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$files, int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Dispatcher Process Function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a2df980a730ead110b8ccb346df77dbf8}{worker}} (int rank, int size, int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Worker Process Function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a8f32322433af4bd02e3fa9f759bf8570}{get\+\_\+data}} (struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$files, int num\+Files, int $\ast$curr\+File\+Index, char $\ast$buffer, int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Get next buffer of data from the active file in the shared region. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_ac2713df776edf49e07e82bd8014f6715}{print\+Results}} (struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$files, int num\+Files)
+\begin{DoxyCompactList}\small\item\em Print the results of the counting. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Portuguese Text processing. 
+
+(interface file)
+
+Constants used in the program.
+
+Problem main parameters. \begin{DoxyItemize}
+\item BUFFER\+\_\+\+SIZE\+\_\+\+DEFAULT.\end{DoxyItemize}
+Definition of the initial operations carried out by the dispatcher / worker processes\+: \begin{DoxyItemize}
+\item cli\+\_\+parser \item print\+Usage \item dispatcher \item worker \item get\+\_\+delta\+\_\+time \item print\+Results.\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ May 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8h_a9ddfe7994ae1124130928608f1711603}\label{main_8h_a9ddfe7994ae1124130928608f1711603}} 
+\index{main.h@{main.h}!cli\_parser@{cli\_parser}}
+\index{cli\_parser@{cli\_parser}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{cli\_parser()}{cli\_parser()}}
+{\footnotesize\ttfamily void cli\+\_\+parser (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]},  }\item[{int $\ast$}]{num\+Files,  }\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$$\ast$}]{files,  }\item[{int $\ast$}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Argument Parser. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of command line arguments \\
+\hline
+{\em argv} & array of command line arguments \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+{\em files} & array of files \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8h_a38337d7e733dc222781d393a14b52731}\label{main_8h_a38337d7e733dc222781d393a14b52731}} 
+\index{main.h@{main.h}!dispatcher@{dispatcher}}
+\index{dispatcher@{dispatcher}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{dispatcher()}{dispatcher()}}
+{\footnotesize\ttfamily void dispatcher (\begin{DoxyParamCaption}\item[{int}]{rank,  }\item[{int}]{size,  }\item[{int}]{num\+Files,  }\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$}]{files,  }\item[{int}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Dispatcher Process Function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rank} & process rank \\
+\hline
+{\em size} & number of processes \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+{\em files} & array of files \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8h_a8f32322433af4bd02e3fa9f759bf8570}\label{main_8h_a8f32322433af4bd02e3fa9f759bf8570}} 
+\index{main.h@{main.h}!get\_data@{get\_data}}
+\index{get\_data@{get\_data}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{get\_data()}{get\_data()}}
+{\footnotesize\ttfamily void get\+\_\+data (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$}]{files,  }\item[{int}]{num\+Files,  }\item[{int $\ast$}]{curr\+File\+Index,  }\item[{char $\ast$}]{buffer,  }\item[{int}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Get next buffer of data from the active file in the shared region. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em files} & array of files \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+{\em curr\+File\+Index} & index of the current file \\
+\hline
+{\em buffer} & buffer to store the data \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8h_ac2713df776edf49e07e82bd8014f6715}\label{main_8h_ac2713df776edf49e07e82bd8014f6715}} 
+\index{main.h@{main.h}!printResults@{printResults}}
+\index{printResults@{printResults}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{printResults()}{printResults()}}
+{\footnotesize\ttfamily void print\+Results (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$}]{files,  }\item[{int}]{num\+Files }\end{DoxyParamCaption})}
+
+
+
+Print the results of the counting. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em files} & array of files \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8h_a2df980a730ead110b8ccb346df77dbf8}\label{main_8h_a2df980a730ead110b8ccb346df77dbf8}} 
+\index{main.h@{main.h}!worker@{worker}}
+\index{worker@{worker}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{worker()}{worker()}}
+{\footnotesize\ttfamily void worker (\begin{DoxyParamCaption}\item[{int}]{rank,  }\item[{int}]{size,  }\item[{int}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Worker Process Function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rank} & process rank \\
+\hline
+{\em size} & number of processes \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}

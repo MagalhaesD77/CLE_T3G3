@@ -1,0 +1,202 @@
+\hypertarget{main_8c}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE\+\_\+\+T3\+G3/assignment2/prog1/main.c File Reference}
+\label{main_8c}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog1/main.c@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog1/main.c}}
+
+
+Problem name\+: Portuguese Text processing.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$mpi.\+h$>$}\newline
+{\ttfamily \#include $<$libgen.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$getopt.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}main.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utils.\+h\char`\"{}}\newline
+Include dependency graph for main.\+c\+:
+% FIG 0
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a38337d7e733dc222781d393a14b52731}{dispatcher}} (int rank, int size, int num\+Files, struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$files, int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Dispatcher Process Function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a2df980a730ead110b8ccb346df77dbf8}{worker}} (int rank, int size, int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Worker Process Function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a9ddfe7994ae1124130928608f1711603}{cli\+\_\+parser}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]}, int $\ast$num\+Files, struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$$\ast$files, int $\ast$buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Argument Parser. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a8f32322433af4bd02e3fa9f759bf8570}{get\+\_\+data}} (struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$files, int num\+Files, int $\ast$curr\+File\+Index, char $\ast$buffer, int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Get next buffer of data from the active file in the shared region. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ac2713df776edf49e07e82bd8014f6715}{print\+Results}} (struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$files, int num\+Files)
+\begin{DoxyCompactList}\small\item\em Print the results of the counting. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8c_a36d636df8c87afec6a3f1da461ed2a6d}\label{main_8c_a36d636df8c87afec6a3f1da461ed2a6d}} 
+char {\bfseries alphanumeric\+\_\+chars\+\_\+underscore} \mbox{[}$\,$\mbox{]} = \{\textquotesingle{}a\textquotesingle{}, \textquotesingle{}b\textquotesingle{}, \textquotesingle{}c\textquotesingle{}, \textquotesingle{}d\textquotesingle{}, \textquotesingle{}e\textquotesingle{}, \textquotesingle{}f\textquotesingle{}, \textquotesingle{}g\textquotesingle{}, \textquotesingle{}h\textquotesingle{}, \textquotesingle{}i\textquotesingle{}, \textquotesingle{}j\textquotesingle{}, \textquotesingle{}k\textquotesingle{}, \textquotesingle{}l\textquotesingle{}, \textquotesingle{}m\textquotesingle{}, \textquotesingle{}n\textquotesingle{}, \textquotesingle{}o\textquotesingle{}, \textquotesingle{}p\textquotesingle{}, \textquotesingle{}q\textquotesingle{}, \textquotesingle{}r\textquotesingle{}, \textquotesingle{}s\textquotesingle{}, \textquotesingle{}t\textquotesingle{}, \textquotesingle{}u\textquotesingle{}, \textquotesingle{}v\textquotesingle{}, \textquotesingle{}w\textquotesingle{}, \textquotesingle{}x\textquotesingle{}, \textquotesingle{}y\textquotesingle{}, \textquotesingle{}z\textquotesingle{}, \textquotesingle{}0\textquotesingle{}, \textquotesingle{}1\textquotesingle{}, \textquotesingle{}2\textquotesingle{}, \textquotesingle{}3\textquotesingle{}, \textquotesingle{}4\textquotesingle{}, \textquotesingle{}5\textquotesingle{}, \textquotesingle{}6\textquotesingle{}, \textquotesingle{}7\textquotesingle{}, \textquotesingle{}8\textquotesingle{}, \textquotesingle{}9\textquotesingle{}, \textquotesingle{}\+\_\+\textquotesingle{}\}
+\begin{DoxyCompactList}\small\item\em array with codes of alphanumeric characters and underscore \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8c_a7003239e2f7a791b1ce690692f50c60f}\label{main_8c_a7003239e2f7a791b1ce690692f50c60f}} 
+int {\bfseries alphanumeric\+\_\+chars\+\_\+underscore\+\_\+array\+\_\+size} = sizeof(\mbox{\hyperlink{main_8c_a36d636df8c87afec6a3f1da461ed2a6d}{alphanumeric\+\_\+chars\+\_\+underscore}})/sizeof(char)
+\begin{DoxyCompactList}\small\item\em size of the alphanumeric characters and underscore array \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8c_ad192c56aa6f5571f33d369a589bf309d}\label{main_8c_ad192c56aa6f5571f33d369a589bf309d}} 
+char {\bfseries consonants} \mbox{[}$\,$\mbox{]} = \{\textquotesingle{}b\textquotesingle{}, \textquotesingle{}c\textquotesingle{}, \textquotesingle{}d\textquotesingle{}, \textquotesingle{}f\textquotesingle{}, \textquotesingle{}g\textquotesingle{}, \textquotesingle{}h\textquotesingle{}, \textquotesingle{}j\textquotesingle{}, \textquotesingle{}k\textquotesingle{}, \textquotesingle{}l\textquotesingle{}, \textquotesingle{}m\textquotesingle{}, \textquotesingle{}n\textquotesingle{}, \textquotesingle{}p\textquotesingle{}, \textquotesingle{}q\textquotesingle{}, \textquotesingle{}r\textquotesingle{}, \textquotesingle{}s\textquotesingle{}, \textquotesingle{}t\textquotesingle{}, \textquotesingle{}v\textquotesingle{}, \textquotesingle{}w\textquotesingle{}, \textquotesingle{}x\textquotesingle{}, \textquotesingle{}z\textquotesingle{}\}
+\begin{DoxyCompactList}\small\item\em array with codes of consonants \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8c_a9f2474e8ff58b8e31404d0ffb25adbd5}\label{main_8c_a9f2474e8ff58b8e31404d0ffb25adbd5}} 
+int {\bfseries consonants\+\_\+array\+\_\+size} = sizeof(\mbox{\hyperlink{main_8c_ad192c56aa6f5571f33d369a589bf309d}{consonants}})/sizeof(char)
+\begin{DoxyCompactList}\small\item\em size of the consonants array \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8c_a1bbfd1372b5f1b118a0b7a50b9fce1ba}\label{main_8c_a1bbfd1372b5f1b118a0b7a50b9fce1ba}} 
+char {\bfseries outside\+\_\+word\+\_\+chars} \mbox{[}$\,$\mbox{]} = \{0x20, 0x9, 0xD, 0xA, 0x2d, 0x22, 0x5b, 0x5d, 0x28, 0x29, 0x2e, 0x2c, 0x3a, 0x3b, 0x3f, 0x21\}
+\begin{DoxyCompactList}\small\item\em array with codes of outside word characters \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{main_8c_aa8fd6e97f9cd7cbb0ff207336228a393}\label{main_8c_aa8fd6e97f9cd7cbb0ff207336228a393}} 
+int {\bfseries outside\+\_\+word\+\_\+array\+\_\+size} = sizeof(\mbox{\hyperlink{main_8c_a1bbfd1372b5f1b118a0b7a50b9fce1ba}{outside\+\_\+word\+\_\+chars}})/sizeof(char)
+\begin{DoxyCompactList}\small\item\em size of the outside word characters array \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Portuguese Text processing. 
+
+(implementation file)
+
+Constants used in the program.
+
+Problem main parameters. \begin{DoxyItemize}
+\item BUFFER\+\_\+\+SIZE\+\_\+\+DEFAULT.\end{DoxyItemize}
+Definition of the initial operations carried out by the dispatcher / worker processes\+: \begin{DoxyItemize}
+\item cli\+\_\+parser \item print\+Usage \item dispatcher \item worker \item get\+\_\+delta\+\_\+time \item print\+Results.\end{DoxyItemize}
+\begin{DoxyAuthor}{Author}
+Diogo Magalhães \& Rafael Gil -\/ May 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8c_a9ddfe7994ae1124130928608f1711603}\label{main_8c_a9ddfe7994ae1124130928608f1711603}} 
+\index{main.c@{main.c}!cli\_parser@{cli\_parser}}
+\index{cli\_parser@{cli\_parser}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{cli\_parser()}{cli\_parser()}}
+{\footnotesize\ttfamily void cli\+\_\+parser (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]},  }\item[{int $\ast$}]{num\+Files,  }\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$$\ast$}]{files,  }\item[{int $\ast$}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Argument Parser. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of command line arguments \\
+\hline
+{\em argv} & array of command line arguments \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+{\em files} & array of files \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a38337d7e733dc222781d393a14b52731}\label{main_8c_a38337d7e733dc222781d393a14b52731}} 
+\index{main.c@{main.c}!dispatcher@{dispatcher}}
+\index{dispatcher@{dispatcher}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{dispatcher()}{dispatcher()}}
+{\footnotesize\ttfamily void dispatcher (\begin{DoxyParamCaption}\item[{int}]{rank,  }\item[{int}]{size,  }\item[{int}]{num\+Files,  }\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$}]{files,  }\item[{int}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Dispatcher Process Function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rank} & process rank \\
+\hline
+{\em size} & number of processes \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+{\em files} & array of files \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a8f32322433af4bd02e3fa9f759bf8570}\label{main_8c_a8f32322433af4bd02e3fa9f759bf8570}} 
+\index{main.c@{main.c}!get\_data@{get\_data}}
+\index{get\_data@{get\_data}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{get\_data()}{get\_data()}}
+{\footnotesize\ttfamily void get\+\_\+data (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$}]{files,  }\item[{int}]{num\+Files,  }\item[{int $\ast$}]{curr\+File\+Index,  }\item[{char $\ast$}]{buffer,  }\item[{int}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Get next buffer of data from the active file in the shared region. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em files} & array of files \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+{\em curr\+File\+Index} & index of the current file \\
+\hline
+{\em buffer} & buffer to store the data \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{main_8c_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main. 
+
+Its role is creating the processes that will process the files and count the words and multi consonant words, and wait for them to finish to output the results.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of words of the command line \\
+\hline
+{\em argv} & list of words of the command line\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+status of operation 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8c_ac2713df776edf49e07e82bd8014f6715}\label{main_8c_ac2713df776edf49e07e82bd8014f6715}} 
+\index{main.c@{main.c}!printResults@{printResults}}
+\index{printResults@{printResults}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{printResults()}{printResults()}}
+{\footnotesize\ttfamily void print\+Results (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcustomFile}{custom\+File}} $\ast$}]{files,  }\item[{int}]{num\+Files }\end{DoxyParamCaption})}
+
+
+
+Print the results of the counting. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em files} & array of files \\
+\hline
+{\em num\+Files} & number of files \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a2df980a730ead110b8ccb346df77dbf8}\label{main_8c_a2df980a730ead110b8ccb346df77dbf8}} 
+\index{main.c@{main.c}!worker@{worker}}
+\index{worker@{worker}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{worker()}{worker()}}
+{\footnotesize\ttfamily void worker (\begin{DoxyParamCaption}\item[{int}]{rank,  }\item[{int}]{size,  }\item[{int}]{buffer\+Size }\end{DoxyParamCaption})}
+
+
+
+Worker Process Function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rank} & process rank \\
+\hline
+{\em size} & number of processes \\
+\hline
+{\em buffer\+Size} & buffer size \\
+\hline
+\end{DoxyParams}

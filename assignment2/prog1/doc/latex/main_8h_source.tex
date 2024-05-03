@@ -1,0 +1,50 @@
+\hypertarget{main_8h_source}{}\doxysection{main.\+h}
+\label{main_8h_source}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog1/main.h@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog1/main.h}}
+\mbox{\hyperlink{main_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#ifndef PROBCONST\_H\_}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#define PROBCONST\_H\_}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{32 \textcolor{keyword}{struct }\mbox{\hyperlink{structcustomFile}{customFile}}}
+\DoxyCodeLine{33 \{}
+\DoxyCodeLine{34     FILE *file;}
+\DoxyCodeLine{35     \textcolor{keywordtype}{char} *fileName;}
+\DoxyCodeLine{36     \textcolor{keywordtype}{int} numWords;}
+\DoxyCodeLine{37     \textcolor{keywordtype}{int} numMultiConsWords;}
+\DoxyCodeLine{38     \textcolor{keywordtype}{int} opened;}
+\DoxyCodeLine{39     \textcolor{keywordtype}{int} failed;}
+\DoxyCodeLine{40 \};}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 }
+\DoxyCodeLine{49 \textcolor{keyword}{struct }\mbox{\hyperlink{structworkerToDispatcherMessage}{workerToDispatcherMessage}}}
+\DoxyCodeLine{50 \{}
+\DoxyCodeLine{51     \textcolor{keywordtype}{int} numWords;}
+\DoxyCodeLine{52     \textcolor{keywordtype}{int} numMultiConsWords;}
+\DoxyCodeLine{53 \};}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55 }
+\DoxyCodeLine{57 \textcolor{preprocessor}{\#define BUFFER\_SIZE\_DEFAULT 8192;}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 }
+\DoxyCodeLine{70 \textcolor{keywordtype}{void} \mbox{\hyperlink{main_8h_a9ddfe7994ae1124130928608f1711603}{cli\_parser}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} *argv[], \textcolor{keywordtype}{int} *numFiles, \textcolor{keyword}{struct} \mbox{\hyperlink{structcustomFile}{customFile}} **files, \textcolor{keywordtype}{int} *bufferSize);}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72 }
+\DoxyCodeLine{79 \textcolor{keyword}{static} \textcolor{keywordtype}{void} printUsage (\textcolor{keywordtype}{char} *cmdName);}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81 }
+\DoxyCodeLine{92 \textcolor{keywordtype}{void} \mbox{\hyperlink{main_8h_a38337d7e733dc222781d393a14b52731}{dispatcher}}(\textcolor{keywordtype}{int} rank, \textcolor{keywordtype}{int} size, \textcolor{keywordtype}{int} numFiles, \textcolor{keyword}{struct} \mbox{\hyperlink{structcustomFile}{customFile}} *files, \textcolor{keywordtype}{int} bufferSize);}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94 }
+\DoxyCodeLine{103 \textcolor{keywordtype}{void} \mbox{\hyperlink{main_8h_a2df980a730ead110b8ccb346df77dbf8}{worker}}(\textcolor{keywordtype}{int} rank, \textcolor{keywordtype}{int} size, \textcolor{keywordtype}{int} bufferSize);}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105 }
+\DoxyCodeLine{116 \textcolor{keywordtype}{void} \mbox{\hyperlink{main_8h_a8f32322433af4bd02e3fa9f759bf8570}{get\_data}}(\textcolor{keyword}{struct} \mbox{\hyperlink{structcustomFile}{customFile}} *files, \textcolor{keywordtype}{int} numFiles, \textcolor{keywordtype}{int} *currFileIndex, \textcolor{keywordtype}{char} *buffer, \textcolor{keywordtype}{int} bufferSize);}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118 }
+\DoxyCodeLine{126 \textcolor{keywordtype}{void} \mbox{\hyperlink{main_8h_ac2713df776edf49e07e82bd8014f6715}{printResults}}(\textcolor{keyword}{struct} \mbox{\hyperlink{structcustomFile}{customFile}} *files, \textcolor{keywordtype}{int} numFiles);}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{128 \textcolor{preprocessor}{\#endif }\textcolor{comment}{/* PROBCONST\_H\_ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{129 }
+
+\end{DoxyCode}

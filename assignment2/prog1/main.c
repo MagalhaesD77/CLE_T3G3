@@ -1,18 +1,20 @@
 /**
- *  \file ex1.c (implementation file)
+ *  \file main.c (implementation file)
  *
  *  \brief Problem name: Portuguese Text processing.
  * 
  *  Constants used in the program.
  *
  *  Problem main parameters.
- *     \li N_THREADS_DEFAULT
  *     \li BUFFER_SIZE_DEFAULT.
  *
- *  Definition of the initial operations carried out by the main / worker threads:
+ *  Definition of the initial operations carried out by the dispatcher / worker processes:
  *     \li cli_parser
  *     \li printUsage
- *     \li worker.
+ *     \li dispatcher
+ *     \li worker
+ *     \li get_delta_time
+ *     \li printResults.
  *
  *  \author Diogo Magalhães & Rafael Gil - May 2024
  */
@@ -20,26 +22,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <pthread.h>
+#include <mpi.h>
 #include <libgen.h>
 #include <time.h>
 #include <getopt.h>
 #include <stdlib.h>
-
 #include <stdbool.h>
 
-
-#include <mpi.h>
-
 #include "main.h"
-
 #include "utils.h"
 
 /** \brief execution time measurement */
 static double get_delta_time(void);
-
-void printResults(struct customFile *files, int numFiles);
-
 
 
 /** \brief array with codes of alphanumeric characters and underscore */
@@ -62,9 +56,9 @@ int outside_word_array_size = sizeof(outside_word_chars)/sizeof(char);
 
 
 /**
- *  \brief Main thread.
+ *  \brief Main.
  *
- *  Its role is creating the threads that will process the files and count the words
+ *  Its role is creating the processes that will process the files and count the words
  *  and multi consonant words, and wait for them to finish to output the results.
  *
  *  \param argc number of words of the command line
@@ -124,7 +118,15 @@ int main(int argc, char *argv[]){
 }
 
 
-
+/**
+ * \brief Dispatcher Process Function.
+ * 
+ * \param rank process rank
+ * \param size number of processes
+ * \param numFiles number of files
+ * \param files array of files
+ * \param bufferSize buffer size
+ */
 
 void dispatcher(int rank, int size, int numFiles, struct customFile *files, int bufferSize){
   
@@ -184,6 +186,14 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
 
 }
 
+
+/**
+ * \brief Worker Process Function.
+ * 
+ * \param rank process rank
+ * \param size number of processes
+ * \param bufferSize buffer size
+ */
 
 void worker(int rank, int size, int bufferSize){
 
@@ -266,8 +276,6 @@ void worker(int rank, int size, int bufferSize){
 }
 
 
-
-
 /**
  *  \brief Print Usage of the program.
  *
@@ -282,6 +290,7 @@ static void printUsage (char *cmdName)
            "  -b bufferSize --- set the buffer size (default: 8192)\n"
            "  -h            --- print this help\n", cmdName);
 }
+
 
 /**
  *  \brief Get the process time that has elapsed since last call of this time.
@@ -301,7 +310,6 @@ static double get_delta_time(void)
   }
   return (double) (t1.tv_sec - t0.tv_sec) + 1.0e-9 * (double) (t1.tv_nsec - t0.tv_nsec);
 }
-
 
 
 /**
@@ -389,6 +397,15 @@ void cli_parser(int argc, char *argv[], int *numFiles, struct customFile **files
 }
 
 
+/**
+ *  \brief Get next buffer of data from the active file in the shared region.
+ *
+ *  \param files array of files
+ *  \param numFiles number of files
+ *  \param currFileIndex index of the current file
+ *  \param buffer buffer to store the data
+ *  \param bufferSize buffer size
+ */
 
 void get_data(struct customFile *files, int numFiles, int *currFileIndex, char *buffer, int bufferSize)
 {
@@ -425,6 +442,14 @@ void get_data(struct customFile *files, int numFiles, int *currFileIndex, char *
   return;
 
 }
+
+
+/**
+ *  \brief Print the results of the counting.
+ *  
+ *  \param files array of files
+ *  \param numFiles number of files
+ */
 
 void printResults(struct customFile *files, int numFiles)
 {
