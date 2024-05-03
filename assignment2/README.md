@@ -31,4 +31,3 @@ To run the ex2 run the following command changing the values between < and > to 
 ```bash
 mpiexec -n <number-of-processes> ./prog2/main <path-to-file>
 ```
-

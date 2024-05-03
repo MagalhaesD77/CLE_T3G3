@@ -139,7 +139,7 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
 
   // Allocate memory for the worker messages
   for (int i = 0; i < size-1; i++){
-    recData[i] = malloc(sizeof(struct workerToDispatcherMessage));
+    recData[i] = malloc(sizeof(struct workerToDispatcherMessage) + 50);
   }
 
   while (currFileIndex < numFiles){
