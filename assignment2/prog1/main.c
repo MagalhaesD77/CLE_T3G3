@@ -132,8 +132,7 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
   
   int currFileIndex = 0;
   struct workerToDispatcherMessage *recData[size-1]; // 0 - Need work, 1 - Results
-  // struct DispatcherToWorkerMessage sndData = {0}; // 0 - Deliver Work, 1 - No Work
-  char buffer[bufferSize];
+  char buffer[bufferSize];  // Tag 0 - Work, Tag 1 - Stop
   bool allMsgRec, recVal, msgRec[size-1];
   MPI_Request reqSnd[size-1], reqRec[size-1];
   int workerFileStatus[size-1];
