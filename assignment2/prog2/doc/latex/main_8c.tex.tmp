@@ -1,0 +1,163 @@
+\hypertarget{main_8c}{}\doxysection{/home/diogo/\+Universidade/\+Mestrado/1º\+Ano/2º\+Semestre/\+CLE/\+CLE\+\_\+\+T3\+G3/assignment2/prog2/main.c File Reference}
+\label{main_8c}\index{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog2/main.c@{/home/diogo/Universidade/Mestrado/1ºAno/2ºSemestre/CLE/CLE\_T3G3/assignment2/prog2/main.c}}
+
+
+Problem name\+: Bitonic sort.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$mpich/mpi.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}main.\+h\char`\"{}}\newline
+Include dependency graph for main.\+c\+:
+% FIG 0
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main thread. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ad95206b4c57c571b5efdaf397ed558fc}{read\+File}} (char $\ast$file\+Name, int $\ast$len\+Number\+Array, int $\ast$$\ast$number\+Array)
+\begin{DoxyCompactList}\small\item\em Read file and populate data array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ae54b4f9fad8132527bdda3315075b7fe}{verify\+If\+Sequence\+Is\+Ordered}} (int len\+Number\+Array, int $\ast$$\ast$number\+Array)
+\begin{DoxyCompactList}\small\item\em checks if the number array is ordered in decreasing order \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ae1055e2c6b2ff65a7d5185436bf99deb}{print\+\_\+int\+\_\+array}} (int $\ast$$\ast$arr, int size)
+\begin{DoxyCompactList}\small\item\em Print a formatted array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a2b7a63a85ea0d65fe0e325fbb325c0ba}{imperative\+Bitonic\+Sort}} (int $\ast$array, int N, int start\+Index, int end\+Index)
+\begin{DoxyCompactList}\small\item\em implementation of the imperitive bitonic sort -\/ descending order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ac69842f6331dc8fc281cb654cb0f7533}{merge}} (int $\ast$array, int N, int start\+Index, int end\+Index)
+\begin{DoxyCompactList}\small\item\em implements bitonic merge \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Problem name\+: Bitonic sort. 
+
+(implementation file)
+
+Synchronization based MPI (Message Passing Interface).
+
+\begin{DoxyAuthor}{Author}
+Rafael Gil \& Diogo Magalhães -\/ April 2024 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8c_a2b7a63a85ea0d65fe0e325fbb325c0ba}\label{main_8c_a2b7a63a85ea0d65fe0e325fbb325c0ba}} 
+\index{main.c@{main.c}!imperativeBitonicSort@{imperativeBitonicSort}}
+\index{imperativeBitonicSort@{imperativeBitonicSort}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{imperativeBitonicSort()}{imperativeBitonicSort()}}
+{\footnotesize\ttfamily void imperative\+Bitonic\+Sort (\begin{DoxyParamCaption}\item[{int $\ast$}]{array,  }\item[{int}]{N,  }\item[{int}]{start\+Index,  }\item[{int}]{end\+Index }\end{DoxyParamCaption})}
+
+
+
+implementation of the imperitive bitonic sort -\/ descending order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array of numbers to be sorted \\
+\hline
+{\em N} & length of the array \\
+\hline
+{\em start\+Index} & index where sub-\/sequence starts \\
+\hline
+{\em end\+Index} & index where sub-\/sequence ends \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{main_8c_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main thread. 
+
+Starts the simulation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of words of the command line \\
+\hline
+{\em argv} & list of words of the command line\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+status of operation 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8c_ac69842f6331dc8fc281cb654cb0f7533}\label{main_8c_ac69842f6331dc8fc281cb654cb0f7533}} 
+\index{main.c@{main.c}!merge@{merge}}
+\index{merge@{merge}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{merge()}{merge()}}
+{\footnotesize\ttfamily void merge (\begin{DoxyParamCaption}\item[{int $\ast$}]{array,  }\item[{int}]{N,  }\item[{int}]{start\+Index,  }\item[{int}]{end\+Index }\end{DoxyParamCaption})}
+
+
+
+implements bitonic merge 
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & array of numbers to be sorted \\
+\hline
+{\em N} & length of the array \\
+\hline
+{\em start\+Index} & index where sub-\/sequence starts \\
+\hline
+{\em end\+Index} & index where sub-\/sequence ends \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_ae1055e2c6b2ff65a7d5185436bf99deb}\label{main_8c_ae1055e2c6b2ff65a7d5185436bf99deb}} 
+\index{main.c@{main.c}!print\_int\_array@{print\_int\_array}}
+\index{print\_int\_array@{print\_int\_array}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{print\_int\_array()}{print\_int\_array()}}
+{\footnotesize\ttfamily void print\+\_\+int\+\_\+array (\begin{DoxyParamCaption}\item[{int $\ast$$\ast$}]{arr,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Print a formatted array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & array to be printed \\
+\hline
+{\em size} & size of the array \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_ad95206b4c57c571b5efdaf397ed558fc}\label{main_8c_ad95206b4c57c571b5efdaf397ed558fc}} 
+\index{main.c@{main.c}!readFile@{readFile}}
+\index{readFile@{readFile}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{readFile()}{readFile()}}
+{\footnotesize\ttfamily void read\+File (\begin{DoxyParamCaption}\item[{char $\ast$}]{file\+Name,  }\item[{int $\ast$}]{len\+Number\+Array,  }\item[{int $\ast$$\ast$}]{number\+Array }\end{DoxyParamCaption})}
+
+
+
+Read file and populate data array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Name} & name of the file to read \\
+\hline
+{\em len\+Number\+Array} & size of the array \\
+\hline
+{\em number\+Array} & array to be checked \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_ae54b4f9fad8132527bdda3315075b7fe}\label{main_8c_ae54b4f9fad8132527bdda3315075b7fe}} 
+\index{main.c@{main.c}!verifyIfSequenceIsOrdered@{verifyIfSequenceIsOrdered}}
+\index{verifyIfSequenceIsOrdered@{verifyIfSequenceIsOrdered}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{verifyIfSequenceIsOrdered()}{verifyIfSequenceIsOrdered()}}
+{\footnotesize\ttfamily void verify\+If\+Sequence\+Is\+Ordered (\begin{DoxyParamCaption}\item[{int}]{len\+Number\+Array,  }\item[{int $\ast$$\ast$}]{number\+Array }\end{DoxyParamCaption})}
+
+
+
+checks if the number array is ordered in decreasing order 
+
+
+\begin{DoxyParams}{Parameters}
+{\em len\+Number\+Array} & size of the array \\
+\hline
+{\em number\+Array} & array to be checked \\
+\hline
+\end{DoxyParams}

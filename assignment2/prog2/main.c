@@ -1,5 +1,5 @@
 /**
- *  \file bitonicSort.c (implementation file)
+ *  \file main.c (implementation file)
  *
  *  \brief Problem name: Bitonic sort.
  *  
@@ -20,37 +20,7 @@
 #include <math.h>
 #include <mpich/mpi.h>
 
-
-void readFile(char *fileName, int *lenNumberArray, int **numberArray);
-void verifyIfSequenceIsOrdered(int lenNumberArray, int **numberArray);
-void print_int_array(int **arr, int size);
-
-/**
- *  \brief implementation of the imperitive bitonic sort - descending order.
- *
- *  \param array array of numbers to be sorted
- *  \param N length of the array
- *  \param startIndex index where sub-sequence starts
- *  \param endIndex index where sub-sequence ends
- */
-void imperativeBitonicSort(int *array, int N, int startIndex, int endIndex);
-
-/**
- * \brief implements bitonic merge
- * 
- * \param array array of numbers to be sorted
- * \param N length of the array
- * \param startIndex index where sub-sequence starts
- * \param endIndex index where sub-sequence ends
-*/
-void merge(int *array, int N, int startIndex, int endIndex);
-
-/**
- *  \brief Get the process time that has elapsed since last call of this time.
- *
- *  \return process elapsed time
- */
-static double get_delta_time(void);
+#include "main.h"
 
 
 /**
