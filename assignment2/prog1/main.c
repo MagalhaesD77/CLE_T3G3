@@ -149,9 +149,20 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
     buffer[i] = (char *)malloc(bufferSize * sizeof(char));
   }
 
+  // Initialize the active workers
+  int activeWorkers[size-1];
+  for (int i = 0; i < size-1; i++){
+    activeWorkers[i] = 1;
+  }
+
   while (currFileIndex < numFiles){
 
     for (int i = (rank + 1) % size; i < size; i++){
+      if (currFileIndex >= numFiles){
+        activeWorkers[i-1] = 0;
+        continue;
+      }
+
       // clear buffer
       memset(buffer[i-1], '\0', bufferSize);
 
@@ -164,12 +175,18 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
 
     // Receive messages from workers in a non-blocking manner
     for (int i = (rank + 1) % size; i < size; i++){
+      if (activeWorkers[i-1] == 0)
+        continue;
+        
       MPI_Irecv ((struct workerToDispatcherMessage *) recData[i-1], sizeof (struct workerToDispatcherMessage), MPI_BYTE, i, 0, MPI_COMM_WORLD, &reqRec[i-1]);
       msgRec[i-1] = false;
     }
     do{ // Wait for all messages to be received
       allMsgRec = true;
-      for (int i = (rank + 1) % size; i < size; i++)
+      for (int i = (rank + 1) % size; i < size; i++){
+        if (activeWorkers[i-1] == 0)
+          continue;
+
         if (!msgRec[i-1]){
           recVal = false;
           MPI_Test(&reqRec[i-1], (int *) &recVal, MPI_STATUS_IGNORE);
@@ -182,13 +199,15 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
           else
             allMsgRec = false;
         }
+      }
     } while (!allMsgRec);
   }
 
   // Send message to workers to stop working
   memset(buffer[0], '\0', bufferSize);
-  for (int i = (rank + 1) % size; i < size; i++)
+  for (int i = (rank + 1) % size; i < size; i++){
     MPI_Isend(buffer[0], bufferSize, MPI_CHAR, i, 1, MPI_COMM_WORLD, &reqSnd[i-1]);
+  }
 
 }
 
