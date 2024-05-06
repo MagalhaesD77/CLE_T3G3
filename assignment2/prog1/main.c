@@ -131,28 +131,35 @@ int main(int argc, char *argv[]){
 void dispatcher(int rank, int size, int numFiles, struct customFile *files, int bufferSize){
   
   int currFileIndex = 0;
-  struct workerToDispatcherMessage *recData[size-1]; // 0 - Need work, 1 - Results
-  char buffer[bufferSize];  // Tag 0 - Work, Tag 1 - Stop
+  // struct workerToDispatcherMessage *recData[size-1]; // 0 - Need work, 1 - Results
+  struct workerToDispatcherMessage **recData = (struct workerToDispatcherMessage **)malloc((size-1) * sizeof(struct workerToDispatcherMessage *));
+  char **buffer = (char **)malloc((size-1) * sizeof(char *)); // Tag 0 - Work, Tag 1 - Stop
   bool allMsgRec, recVal, msgRec[size-1];
   MPI_Request reqSnd[size-1], reqRec[size-1];
   int workerFileStatus[size-1];
 
   // Allocate memory for the worker messages
   for (int i = 0; i < size-1; i++){
-    recData[i] = malloc(sizeof(struct workerToDispatcherMessage) + 50);
+    // recData[i] = malloc(sizeof(struct workerToDispatcherMessage));
+    recData[i] = (struct workerToDispatcherMessage *)malloc(sizeof(struct workerToDispatcherMessage));
+  }
+
+  // Allocate memory for the buffer
+  for (int i = 0; i < size-1; i++){
+    buffer[i] = (char *)malloc(bufferSize * sizeof(char));
   }
 
   while (currFileIndex < numFiles){
 
     for (int i = (rank + 1) % size; i < size; i++){
       // clear buffer
-      memset(buffer, '\0', bufferSize);
+      memset(buffer[i-1], '\0', bufferSize);
 
       // Get data to send to worker
       workerFileStatus[i-1] = currFileIndex;
-      get_data(files, numFiles, &currFileIndex, buffer, bufferSize);
+      get_data(files, numFiles, &currFileIndex, buffer[i-1], bufferSize);
 
-      MPI_Isend(buffer, bufferSize, MPI_CHAR, i, 0, MPI_COMM_WORLD, &reqSnd[i-1]);
+      MPI_Isend(buffer[i-1], bufferSize, MPI_CHAR, i, 0, MPI_COMM_WORLD, &reqSnd[i-1]);
     }
 
     // Receive messages from workers in a non-blocking manner
@@ -179,9 +186,9 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
   }
 
   // Send message to workers to stop working
-  memset(buffer, '\0', bufferSize);
+  memset(buffer[0], '\0', bufferSize);
   for (int i = (rank + 1) % size; i < size; i++)
-    MPI_Isend(buffer, bufferSize, MPI_CHAR, i, 1, MPI_COMM_WORLD, &reqSnd[i-1]);
+    MPI_Isend(buffer[0], bufferSize, MPI_CHAR, i, 1, MPI_COMM_WORLD, &reqSnd[i-1]);
 
 }
 
