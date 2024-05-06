@@ -151,17 +151,16 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
 
   // Initialize the active workers
   int activeWorkers[size-1];
+  int activeWorkersCount = size-1;
   for (int i = 0; i < size-1; i++){
     activeWorkers[i] = 1;
   }
 
-  while (currFileIndex < numFiles){
+  while (activeWorkersCount > 0){
 
     for (int i = (rank + 1) % size; i < size; i++){
-      if (currFileIndex >= numFiles){
-        activeWorkers[i-1] = 0;
+      if (activeWorkers[i-1] == 0)
         continue;
-      }
 
       // clear buffer
       memset(buffer[i-1], '\0', bufferSize);
@@ -169,6 +168,11 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
       // Get data to send to worker
       workerFileStatus[i-1] = currFileIndex;
       get_data(files, numFiles, &currFileIndex, buffer[i-1], bufferSize);
+
+      if (buffer[i-1][0] == '\0'){
+        activeWorkers[i-1] = 0;
+        activeWorkersCount--;
+      }
 
       MPI_Isend(buffer[i-1], bufferSize, MPI_CHAR, i, 0, MPI_COMM_WORLD, &reqSnd[i-1]);
     }
@@ -203,12 +207,6 @@ void dispatcher(int rank, int size, int numFiles, struct customFile *files, int 
     } while (!allMsgRec);
   }
 
-  // Send message to workers to stop working
-  memset(buffer[0], '\0', bufferSize);
-  for (int i = (rank + 1) % size; i < size; i++){
-    MPI_Isend(buffer[0], bufferSize, MPI_CHAR, i, 1, MPI_COMM_WORLD, &reqSnd[i-1]);
-  }
-
 }
 
 
@@ -232,10 +230,10 @@ void worker(int rank, int size, int bufferSize){
 
   while(true){
 
-    MPI_Recv ((char *) &recData, bufferSize, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Recv ((char *) &recData, bufferSize, MPI_CHAR, 0, 0, MPI_COMM_WORLD, &status);
 
-    if (status.MPI_TAG == 1){
-      // Stop working
+    if (recData[0] == '\0'){
+      // No more work to do
       break;
     }
 
