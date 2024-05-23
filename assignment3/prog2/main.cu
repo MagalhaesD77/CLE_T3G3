@@ -3,7 +3,8 @@
  *
  *  \brief Problem name: Bitonic sort.
  *  
- *
+ *  CUDA
+ * 
  *  \author Rafael Gil & Diogo Magalhães - May 2024
  */
 
@@ -40,17 +41,7 @@ void verifyIfSequenceIsOrdered(int lenNumberArray, int **numberArray);
  *  \param startIndex index where sub-sequence starts
  *  \param endIndex index where sub-sequence ends
  */
-_global static void bitonicSortOnGPU(int *array, int N, int startIndex, int endIndex);
-
-/**
- *  \brief implementation of the imperitive bitonic sort - descending order.
- *
- *  \param array array of numbers to be sorted
- *  \param N length of the array
- *  \param startIndex index where sub-sequence starts
- *  \param endIndex index where sub-sequence ends
- */
-void bitonicSortOnCPU(int *array, int N, int startIndex, int endIndex);
+__global__ static void bitonicSortOnGPU(int *array, int length, int iter);
 
 /**
  *  \brief Get the process time that has elapsed since last call of this time.
@@ -71,6 +62,14 @@ static double get_delta_time(void);
  *  \return status of operation
  */
 int main(){
+
+    printf("%s Starting...\n", argv[0]);
+
+    if (argc != 2){
+        fprintf(stderr, "Invalid number of arguments\n");
+        exit(EXIT_FAILURE);
+    }
+
     // set up device
     int dev = 0;
 
@@ -79,16 +78,58 @@ int main(){
     printf("Using Device %d: %s\n", dev, deviceProp.name);
     CHECK (cudaSetDevice (dev)); // the gpu its going to use
 
-    int n = 1024; // degree of a square matrix
+    // number sequence
+    int *numberSequence = NULL;
+    
+    // length of number sequence
+    int lenNumberSequence = 0;
 
-    // host space
-    int nElem = n * n; // number of elements of a square matrix
-    int nBytes = nElem * sizeof(double); // matrix storage space in bytes
-    double *sequence_gpu, *sequence_cpu;
+    // read sequence from file
+    readFile(argv[1], &lenNumberSequence, &numberSequence);
 
-    sequence_gpu = (double *)malloc(nBytes);
-    sequence_cpu = (double *)malloc(nBytes);
+    if(lenNumberSequence > (size_t)5e9){
+        fprintf(stderr, "Sequence too big. The GPU can only withstand 5Gb of data\n");
+        exit(EXIT_FAILURE);
+    }
 
+    // alocate memory for the sequence in the GPU
+    int *gpuSequence = NULL;
+    CHECK(cudaMalloc((void**)&gpuSequence, lenNumberSequence * sizeof(int)));
+
+    // copy sequence from host to gpu
+    CHECK(cudaMemcpy(gpuSequence, numberSequence, lenNumberSequence * sizeof(int), cudaMemcpyHostToDevice));
+
+    // kernel configuration
+    unsigned int gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ;
+	
+	blockDimX = 1 << 0; // optimize!
+	blockDimY = 1 << 0; // optimize!
+	blockDimZ = 1 << 0; // do not change!
+	gridDimX = 1 << 0; 	// optimize!
+	gridDimY = 1 << 0;  // optimize!
+	gridDimZ = 1 << 0;  // do not change!
+
+    (void) get_delta_time();
+
+    // DO THE ITERATION AND SORTING PROCESS
+
+
+    printf("\nElapsed time = %.6f s\n", get_delta_time());
+
+    // copy sequence from gpu to host
+    CHECK(cudaMemcpy(numberSequence, gpuSequence, lenNumberSequence * sizeof(int), cudaMemcpyDeviceToHost));
+
+    // free alocated memory on the gpu
+    CHECK(cudeFree(gpuSequence))
+
+    // reset the gpu
+    CHECK(cudaDeviceReset())
+
+    //check if array is correctly ordered
+    verifyIfSequenceIsOrdered(lenNumberSequence, &numberSequence);
+
+    // free alocated memory
+    free(numberSequence)
 
     exit(EXIT_SUCCESS);
 }
@@ -158,15 +199,27 @@ void imperativeBitonicSort(int *array, int N, int startIndex, int endIndex){
     }
 }
 
-static double get_delta_time(void){
-  static struct timespec t0, t1;
 
-  t0 = t1;
+__global__ void bitonicSortOnGPU(int *array, int length, int iter)
+{
+    unsigned int x, y, idx;
 
-  if(clock_gettime (CLOCK_MONOTONIC, &t1) != 0){
-    perror ("clock_gettime");
-    exit(1);
-  }
+    x = (unsigned int)threadIdx.x + blockDim.x * blockIdx.x
+    y = threadIdx.y + blockDim.y * blockIdx.y
+    idx = blockDim.x * gridDim.x * y + x
+}
 
-  return (double) (t1.tv_sec - t0.tv_sec) + 1.0e-9 * (double) (t1.tv_nsec - t0.tv_nsec);
+static double get_delta_time(void)
+{
+    static struct timespec t0, t1;
+
+    t0 = t1;
+
+    if (clock_gettime(CLOCK_MONOTONIC, &t1) != 0)
+    {
+        perror("clock_gettime");
+        exit(1);
+    }
+
+    return (double)(t1.tv_sec - t0.tv_sec) + 1.0e-9 * (double)(t1.tv_nsec - t0.tv_nsec);
 }
