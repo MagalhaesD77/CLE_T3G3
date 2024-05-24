@@ -16,6 +16,8 @@
 #include "common.h"
 #include <cuda_runtime.h>
 
+#define N 1024  // length of the row 
+
 /**
  * \brief Read file and populate data array
  * 
@@ -41,7 +43,7 @@ void verifyIfSequenceIsOrdered(int lenNumberArray, int **numberArray);
  *  \param startIndex index where sub-sequence starts
  *  \param endIndex index where sub-sequence ends
  */
-__global__ static void bitonicSortOnGPU(int *array, int length, int iter);
+__global__ static void bitonicSortOnGPU(int *array, int lenSubSequence, int iter);
 
 /**
  *  \brief Get the process time that has elapsed since last call of this time.
@@ -109,10 +111,29 @@ int main(){
 	gridDimY = 1 << 0;  // optimize!
 	gridDimZ = 1 << 0;  // do not change!
 
+    // define the number of iterations necessary
+    int nIter = (int) (log2 (N) + 1.1);
+
     (void) get_delta_time();
 
-    // DO THE ITERATION AND SORTING PROCESS
+    for (int i = 0; i < nIter; i++)
+    {
+        // DO THE ITERATION AND SORTING PROCESS
 
+        dim3 grid(gridDimX, gridDimY, gridDimZ);
+		dim3 block(blockDimX, blockDimY, blockDimZ);
+
+        // calculate the size of the sub-sequence
+        int lenSubSeqeunce = (int)(1 << i) * N;
+
+        bitonicSortOnGPU<<<grid, block>>>(gpuSequence, lenSubSeqeunce, i);
+
+        // synchronize and wait for all the threads
+        CHECK(cudaDeviceSynchronize());
+
+        // check if any error occured	
+		CHECK(cudaGetLastError());
+    }
 
     printf("\nElapsed time = %.6f s\n", get_delta_time());
 
@@ -200,13 +221,64 @@ void imperativeBitonicSort(int *array, int N, int startIndex, int endIndex){
 }
 
 
-__global__ void bitonicSortOnGPU(int *array, int length, int iter)
+__global__ void bitonicSortOnGPU(int *array, int lenSubSequence, int iter)
 {
-    unsigned int x, y, idx;
+    int x, y, idx;
 
-    x = (unsigned int)threadIdx.x + blockDim.x * blockIdx.x
-    y = threadIdx.y + blockDim.y * blockIdx.y
-    idx = blockDim.x * gridDim.x * y + x
+    // calculate the segment of the sequence for the current thread 
+    x = (int)threadIdx.x + (int)blockDim.x * (int)blockIdx.x;
+    y = (int)threadIdx.y + (int)blockDim.y * (int)blockIdx.y;
+    idx = (int)blockDim.x * (int)gridDim.x * y + x;
+
+    if (lenSubSequence == N){   // bitonic sort
+        // iterate through the powers of 2 up to N
+        // simulates the layers of the algorithm
+        for (int k = 2; k <= lenSubSequence; k = 2 * k) {
+            // iterate through half of the current value of k
+            // controls the length of the comparison between the numbers
+            for (int j = k / 2; j > 0; j = j / 2) {
+                // iterates through the partition of the array
+                for (int i = 0; i <= endIndex; i++) {
+                    int elem = N * (1 << iter) * idx + i;
+                    int ij = elem ^ j;     // bitwise XOR, to calculate the index where to perform the comparison
+                    if ((ij) > elem) {     // assure correct order
+                        if (((elem & k) == 0                               // bitwise AND to check if i-th index is in the lower half of the bitonic sequence
+                                    && array[elem] < array[ij])            // check if i-th element is smaller than ij
+                            || ((elem & k) != 0                            // bitwise AND to check if i-th index is in the upper half of the bitonic sequence
+                                    && array[elem] > array[ij])) {         // check if i-th element is greater than ij
+
+                            // performs a common swap between the elements of the array
+                            int aux = array[elem];
+                            array[elem] = array[ij];
+                            array[ij] = aux;
+                        }
+                    }
+                }
+            }
+        }
+    }else{  // bitonic merge
+        int k = lenSubSequence;
+        for (int j = k / 2; j > 0; j = j / 2) {
+                // iterates through the partition of the array
+                for (int i = 0; i <= endIndex; i++) {
+                    int elem = N * (1 << iter) * idx + i;
+                    int ij = elem ^ j;     // bitwise XOR, to calculate the index where to perform the comparison
+                    if ((ij) > elem) {     // assure correct order
+                        if (((elem & k) == 0                               // bitwise AND to check if i-th index is in the lower half of the bitonic sequence
+                                    && array[elem] < array[ij])            // check if i-th element is smaller than ij
+                            || ((elem & k) != 0                            // bitwise AND to check if i-th index is in the upper half of the bitonic sequence
+                                    && array[elem] > array[ij])) {         // check if i-th element is greater than ij
+
+                            // performs a common swap between the elements of the array
+                            int aux = array[elem];
+                            array[elem] = array[ij];
+                            array[ij] = aux;
+                        }
+                    }
+                }
+        }
+    }
+    
 }
 
 static double get_delta_time(void)
