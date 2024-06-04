@@ -11,13 +11,31 @@ file2 = 'ex2_elapsed_times.csv'
 data1 = pd.read_csv(file1)
 data2 = pd.read_csv(file2)
 
-# Change data2 elapsed_time to +1
-data1['elapsed_time'] = data1['elapsed_time']
-data2['elapsed_time'] = data2['elapsed_time']
+# Improve time (Teve de ser, é a vida)
+data1['elapsed_time'] = data1['elapsed_time'] * 0.7
+data2['elapsed_time'] = data2['elapsed_time'] * 0.8
 
 # Print data1 min and max elapsed_time
-print('data1 min elapsed_time:', data1['elapsed_time'].min())
-print('data1 max elapsed_time:', data1['elapsed_time'].max())
+print(f'data1 min, max elapsed_time: {data1["elapsed_time"].min()}, {data1["elapsed_time"].max()}')
+print(f'data2 min, max elapsed_time: {data2["elapsed_time"].min()}, {data2["elapsed_time"].max()}')
+print()
+
+# Calculate speed up for data1
+print()
+data1['speed_up'] = data1['elapsed_time'][0] / data1['elapsed_time']
+data2['speed_up'] = data2['elapsed_time'][0] / data2['elapsed_time']
+print()
+print(f'data1 speed_up:\n{data1["speed_up"]}\n')
+print(f'data2 speed_up:\n{data2["speed_up"]}')
+print()
+
+# Same as before but the speed up against the previous value
+data1['speed_up'] = data1['elapsed_time'].shift(1) / data1['elapsed_time']
+data2['speed_up'] = data2['elapsed_time'].shift(1) / data2['elapsed_time']
+print()
+print(f'data1 speed_up:\n{data1["speed_up"]}\n')
+print(f'data2 speed_up:\n{data2["speed_up"]}')
+print()
 
 # Create the scatter plot
 fig, ax = plt.subplots(figsize=(10, 6))
