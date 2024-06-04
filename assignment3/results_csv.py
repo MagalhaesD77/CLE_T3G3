@@ -2,8 +2,8 @@ import subprocess
 import re
 import csv
 
-data = "datSeq1M.bin"
-exercise = "ex1"
+data = "dataSet2/datSeq1M.bin"
+exercise = "prog1/ex1"
 
 # Function to run the command and extract elapsed time
 def get_elapsed_time(t_value, data):
